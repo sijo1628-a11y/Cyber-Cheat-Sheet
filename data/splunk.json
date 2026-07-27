@@ -1,0 +1,611 @@
+[
+  {
+    "id": "splunk-001",
+    "category": "splunk",
+    "title": "Basic index search",
+    "code": "index=main",
+    "description": "Search all events in the 'main' index \u2014 the starting point for most investigations.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-002",
+    "category": "splunk",
+    "title": "Search a specific sourcetype",
+    "code": "index=main sourcetype=access_combined",
+    "description": "Restrict a search to events of a specific sourcetype, e.g. web access logs.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-003",
+    "category": "splunk",
+    "title": "Count events",
+    "code": "index=main | stats count",
+    "description": "Count the total number of matching events.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-004",
+    "category": "splunk",
+    "title": "Count by field",
+    "code": "index=main | stats count by src_ip",
+    "description": "Count matching events grouped by a field value, e.g. per source IP.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-005",
+    "category": "splunk",
+    "title": "Top values of a field",
+    "code": "index=main | top host",
+    "description": "Show the most common values of a field along with their count and percentage.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-006",
+    "category": "splunk",
+    "title": "Rare values of a field",
+    "code": "index=main | rare src_ip",
+    "description": "Show the least common values of a field \u2014 useful for spotting anomalous outliers.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-007",
+    "category": "splunk",
+    "title": "Timechart of events",
+    "code": "index=main | timechart span=1h count",
+    "description": "Plot event counts over time, bucketed into a chosen span (e.g. hourly).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats",
+      "visualization"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-008",
+    "category": "splunk",
+    "title": "Timechart by field",
+    "code": "index=main | timechart span=1h count by sourcetype",
+    "description": "Plot a time series of counts, broken out into a separate series per field value.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats",
+      "visualization"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-009",
+    "category": "splunk",
+    "title": "Transaction command",
+    "code": "index=main | transaction session_id maxspan=30m",
+    "description": "Group related events sharing a field (e.g. session_id) into a single transaction, useful for reconstructing sessions.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "transaction"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-010",
+    "category": "splunk",
+    "title": "Extract fields with rex",
+    "code": "index=main | rex field=_raw \"user=(?<user>\\w+)\"",
+    "description": "Extract a new field from raw text using a regular expression, without editing the sourcetype's field extraction config.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "fields",
+      "regex"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-011",
+    "category": "splunk",
+    "title": "Eval a new field",
+    "code": "index=main | eval size_mb=bytes/1024/1024",
+    "description": "Compute a new field with an expression, here converting bytes to megabytes.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "eval"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-012",
+    "category": "splunk",
+    "title": "Conditional eval (if)",
+    "code": "index=main | eval risk=if(failed_logins>5,\"high\",\"low\")",
+    "description": "Create a field whose value depends on a condition \u2014 commonly used to bucket severity/risk.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "eval"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-013",
+    "category": "splunk",
+    "title": "Lookup enrichment",
+    "code": "index=main | lookup threat_intel.csv ip AS src_ip",
+    "description": "Enrich events by joining against a lookup table (e.g. matching source IPs against a threat-intel feed).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "lookup",
+      "threat-hunting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-014",
+    "category": "splunk",
+    "title": "Where filter",
+    "code": "index=main | where bytes > 1000000",
+    "description": "Filter results using a boolean expression, similar to a SQL WHERE clause \u2014 useful for numeric comparisons that 'search' syntax can't express directly.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "filtering"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-015",
+    "category": "splunk",
+    "title": "Sort results",
+    "code": "index=main | sort -bytes",
+    "description": "Sort results by a field; a leading '-' sorts descending.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-016",
+    "category": "splunk",
+    "title": "Dedup results",
+    "code": "index=main | dedup src_ip",
+    "description": "Remove duplicate events, keeping only the first (most recent) event per unique field value.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "filtering"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-017",
+    "category": "splunk",
+    "title": "Stats with multiple functions",
+    "code": "index=main | stats sum(bytes) as total_bytes avg(bytes) as avg_bytes by src_ip",
+    "description": "Compute multiple aggregate statistics per group in a single stats command.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-018",
+    "category": "splunk",
+    "title": "Failed login events (auth)",
+    "code": "index=main sourcetype=linux_secure \"Failed password\"",
+    "description": "Search for failed SSH password authentication attempts in Linux auth logs.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "authentication",
+      "threat-hunting"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-019",
+    "category": "splunk",
+    "title": "Windows failed logon (4625)",
+    "code": "index=main sourcetype=WinEventLog:Security EventCode=4625",
+    "description": "Search for Windows failed-logon events (Event ID 4625) \u2014 a foundation for brute-force detection.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "authentication",
+      "windows",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-020",
+    "category": "splunk",
+    "title": "Windows successful logon (4624)",
+    "code": "index=main sourcetype=WinEventLog:Security EventCode=4624",
+    "description": "Search for Windows successful-logon events (Event ID 4624).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "authentication",
+      "windows"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-021",
+    "category": "splunk",
+    "title": "Brute force detection pattern",
+    "code": "index=main sourcetype=linux_secure \"Failed password\" | stats count by src_ip | where count > 10",
+    "description": "Count failed logins per source IP and surface only those exceeding a threshold \u2014 a simple brute-force detector.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "threat-hunting",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-022",
+    "category": "splunk",
+    "title": "New process creation (Sysmon EventID 1)",
+    "code": "index=main sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational EventCode=1",
+    "description": "Search Sysmon process-creation events \u2014 the backbone of Windows endpoint threat hunting.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "windows",
+      "threat-hunting",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-023",
+    "category": "splunk",
+    "title": "Network connection events (Sysmon EventID 3)",
+    "code": "index=main sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational EventCode=3",
+    "description": "Search Sysmon network-connection events, useful for spotting C2 beaconing or unusual outbound traffic.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "windows",
+      "threat-hunting",
+      "network"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-024",
+    "category": "splunk",
+    "title": "Field extraction with table",
+    "code": "index=main | table _time,src_ip,dest_ip,action",
+    "description": "Display results as a table restricted to selected fields, in the given column order.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "output"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-025",
+    "category": "splunk",
+    "title": "Search within a time range",
+    "code": "index=main earliest=-24h latest=now",
+    "description": "Restrict a search to a relative time window \u2014 here, the last 24 hours.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-026",
+    "category": "splunk",
+    "title": "Chart command",
+    "code": "index=main | chart count over src_ip by action",
+    "description": "Build a chart-ready data structure with one field as rows and another split into columns.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats",
+      "visualization"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-027",
+    "category": "splunk",
+    "title": "Eventstats (non-collapsing stats)",
+    "code": "index=main | eventstats avg(bytes) as avg_bytes by src_ip",
+    "description": "Add aggregate statistics as new fields on every original event, instead of collapsing rows like stats does.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-028",
+    "category": "splunk",
+    "title": "Streamstats (running totals)",
+    "code": "index=main | streamstats count as running_total by src_ip",
+    "description": "Compute a running/cumulative statistic across events in search-result order.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-029",
+    "category": "splunk",
+    "title": "Search with wildcard",
+    "code": "index=main sourcetype=access_* status=5*",
+    "description": "Use wildcards in field values, e.g. matching any sourcetype starting with access_ or any 5xx status code.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-030",
+    "category": "splunk",
+    "title": "Boolean OR search",
+    "code": "index=main (status=403 OR status=401)",
+    "description": "Combine multiple conditions with OR \u2014 matches events satisfying either condition.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-031",
+    "category": "splunk",
+    "title": "Exclude a value (NOT)",
+    "code": "index=main NOT src_ip=10.0.0.1",
+    "description": "Exclude events matching a condition, e.g. filtering out a known-noisy monitoring host.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "splunk-032",
+    "category": "splunk",
+    "title": "Regex match search",
+    "code": "index=main | regex _raw=\"\\d{1,3}(\\.\\d{1,3}){3}\"",
+    "description": "Filter events whose raw text matches a regular expression, here a rough IPv4 pattern.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "regex"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-033",
+    "category": "splunk",
+    "title": "Append another search",
+    "code": "index=main sourcetype=access_combined | append [search index=main sourcetype=linux_secure]",
+    "description": "Combine results from two separate searches into one result set.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "join"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-034",
+    "category": "splunk",
+    "title": "Join two searches on a field",
+    "code": "index=main sourcetype=access_combined | join src_ip [search index=main sourcetype=linux_secure]",
+    "description": "Correlate events from two different sourcetypes that share a common field value.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "join"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-035",
+    "category": "splunk",
+    "title": "Stats distinct count",
+    "code": "index=main | stats dc(src_ip) as unique_sources by dest_ip",
+    "description": "Count the number of distinct values of a field per group \u2014 e.g. how many unique sources hit each destination.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-036",
+    "category": "splunk",
+    "title": "First/last time seen",
+    "code": "index=main | stats earliest(_time) as first_seen latest(_time) as last_seen by src_ip",
+    "description": "Find the first and last time each value of a field appeared \u2014 useful for scoping an incident timeline.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats",
+      "forensics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "splunk-037",
+    "category": "splunk",
+    "title": "Bin/bucket time manually",
+    "code": "index=main | bin _time span=5m | stats count by _time",
+    "description": "Manually bucket the _time field into fixed intervals before aggregating \u2014 an alternative to timechart for custom pipelines.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-038",
+    "category": "splunk",
+    "title": "Search macro usage",
+    "code": "index=main | `my_macro(arg1)`",
+    "description": "Invoke a saved search macro (reusable snippet of SPL) with an argument \u2014 improves query maintainability.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "macros"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-039",
+    "category": "splunk",
+    "title": "Data model / tstats acceleration",
+    "code": "| tstats count from datamodel=Authentication where Authentication.action=failure by Authentication.src",
+    "description": "Query an accelerated data model with tstats for much faster performance over large time ranges than a raw search.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "performance",
+      "stats"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-040",
+    "category": "splunk",
+    "title": "Outlier detection",
+    "code": "index=main | stats count by src_ip | eventstats avg(count) as avg_count stdev(count) as sd | where count > avg_count + 3*sd",
+    "description": "Flag source IPs whose event count is a statistical outlier (beyond 3 standard deviations) \u2014 a simple anomaly-detection pattern.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "threat-hunting",
+      "stats"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-041",
+    "category": "splunk",
+    "title": "Search for DNS exfil-style queries",
+    "code": "index=main sourcetype=dns | eval qlen=len(query) | where qlen > 50",
+    "description": "Flag unusually long DNS query names, a common indicator of DNS-tunneling-based data exfiltration.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "dns",
+      "threat-hunting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "splunk-042",
+    "category": "splunk",
+    "title": "PowerShell script block logging search",
+    "code": "index=main sourcetype=WinEventLog:Microsoft-Windows-PowerShell/Operational EventCode=4104",
+    "description": "Search PowerShell Script Block Logging events, which capture the actual code executed \u2014 key for detecting obfuscated attacker scripts.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "windows",
+      "threat-hunting",
+      "endpoint"
+    ],
+    "difficulty": "Hard"
+  }
+]

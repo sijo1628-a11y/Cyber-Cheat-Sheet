@@ -1,0 +1,152 @@
+[
+  {
+    "id": "yara-001",
+    "category": "yara",
+    "title": "Generic Mimikatz String Detection",
+    "code": "rule Generic_Mimikatz_Strings\n{\n    meta:\n        description = \"Detects common strings found in Mimikatz credential-dumping tool builds\"\n        author = \"cyber-cheat-sheet\"\n        reference = \"Public Mimikatz string signatures\"\n        level = \"high\"\n\n    strings:\n        $s1 = \"sekurlsa::logonpasswords\" ascii\n        $s2 = \"mimikatz(commandline)\" ascii wide\n        $s3 = \"gentilkiwi\" ascii\n        $s4 = \"Benjamin DELPY\" ascii\n\n    condition:\n        any of them\n}",
+    "description": "Flags binaries containing well-known Mimikatz internal strings, useful for scanning file shares or endpoint quarantine for the tool.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "credential-access",
+      "malware-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "yara-002",
+    "category": "yara",
+    "title": "Suspicious PowerShell Encoded Command in File",
+    "code": "rule Suspicious_PowerShell_EncodedCommand\n{\n    meta:\n        description = \"Detects files containing PowerShell -EncodedCommand invocations, often seen in dropper scripts\"\n        level = \"medium\"\n\n    strings:\n        $enc1 = \"-EncodedCommand\" ascii wide nocase\n        $enc2 = \"-enc \" ascii wide nocase\n        $enc3 = \"FromBase64String\" ascii wide\n\n    condition:\n        2 of them\n}",
+    "description": "Scans script/batch files for markers of base64-encoded PowerShell payloads commonly used by droppers and loaders.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "powershell",
+      "obfuscation"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "yara-003",
+    "category": "yara",
+    "title": "Generic Ransomware Note Detection",
+    "code": "rule Generic_Ransomware_Note\n{\n    meta:\n        description = \"Detects text commonly found in ransomware ransom-note files dropped after encryption\"\n        level = \"high\"\n\n    strings:\n        $s1 = \"your files have been encrypted\" nocase ascii wide\n        $s2 = \"decrypt\" nocase ascii wide\n        $s3 = \"bitcoin\" nocase ascii wide\n        $s4 = \"do not rename\" nocase ascii wide\n\n    condition:\n        3 of them\n}",
+    "description": "Matches ransom-note style text files, useful for triage sweeps across a file share after a suspected ransomware event.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "ransomware",
+      "incident-response"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "yara-004",
+    "category": "yara",
+    "title": "PE File with Suspiciously Small Number of Imports",
+    "code": "rule Suspicious_PE_LowImportCount\n{\n    meta:\n        description = \"Flags PE executables with an unusually small import table, sometimes indicating a packed or shellcode-loader binary\"\n        level = \"low\"\n\n    condition:\n        pe.is_pe and\n        pe.number_of_imports > 0 and\n        pe.number_of_imports < 3\n}",
+    "description": "Uses the YARA pe module to flag PE files with very few imported functions, a weak but useful packing/loader heuristic to combine with other signals.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "malware-analysis",
+      "pe-analysis"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "yara-005",
+    "category": "yara",
+    "title": "UPX Packed Executable",
+    "code": "rule UPX_Packed_Executable\n{\n    meta:\n        description = \"Detects executables packed with the UPX packer via its distinctive section names\"\n        level = \"info\"\n\n    strings:\n        $upx1 = \"UPX0\" ascii\n        $upx2 = \"UPX1\" ascii\n        $upx3 = \"UPX!\" ascii\n\n    condition:\n        2 of them\n}",
+    "description": "Identifies UPX-packed binaries by their characteristic section names \u2014 packing alone isn't malicious but often warrants closer inspection.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "malware-analysis",
+      "packing"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "yara-006",
+    "category": "yara",
+    "title": "Suspicious PHP Web Shell (eval/base64)",
+    "code": "rule Suspicious_PHP_WebShell\n{\n    meta:\n        description = \"Detects common PHP web-shell patterns combining eval with base64/gzinflate decoding\"\n        level = \"high\"\n\n    strings:\n        $eval = \"eval(\" ascii\n        $b64 = \"base64_decode(\" ascii\n        $gz = \"gzinflate(\" ascii\n        $post = \"$_POST[\" ascii\n        $req = \"$_REQUEST[\" ascii\n\n    condition:\n        $eval and (( $b64 or $gz ) and ( $post or $req ))\n}",
+    "description": "Flags PHP files combining eval() with base64/gzip decoding of request parameters \u2014 a very common obfuscated web-shell pattern.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "web-shell",
+      "malware-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "yara-007",
+    "category": "yara",
+    "title": "Office Document with AutoOpen Macro",
+    "code": "rule Office_AutoOpen_Macro\n{\n    meta:\n        description = \"Detects OLE/Office documents containing an AutoOpen macro, commonly abused for phishing payload execution\"\n        level = \"medium\"\n\n    strings:\n        $auto1 = \"AutoOpen\" ascii wide\n        $auto2 = \"Document_Open\" ascii wide\n        $shell = \"Shell(\" ascii wide\n\n    condition:\n        1 of ($auto*) and $shell\n}",
+    "description": "Flags Office documents that both auto-execute on open and call Shell() \u2014 a strong phishing-macro indicator worth quarantining for analysis.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "phishing",
+      "malware-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "yara-008",
+    "category": "yara",
+    "title": "Cobalt Strike Beacon Config Marker",
+    "code": "rule CobaltStrike_Beacon_Marker\n{\n    meta:\n        description = \"Detects a byte sequence commonly associated with Cobalt Strike's default beacon configuration XOR key\"\n        level = \"high\"\n\n    strings:\n        $s1 = { 00 01 00 01 00 02 } // known config block pattern fragment (illustrative)\n        $s2 = \"beacon.dll\" ascii nocase\n        $s3 = \"ReflectiveLoader\" ascii\n\n    condition:\n        any of them\n}",
+    "description": "Illustrative signature for spotting common Cobalt Strike beacon artifacts; production detection should use maintained community rule sets, updated as the tool evolves.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "c2",
+      "malware-analysis"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "yara-009",
+    "category": "yara",
+    "title": "Suspicious Double File Extension",
+    "code": "rule Suspicious_Double_Extension_Filename\n{\n    meta:\n        description = \"Detects filenames using a double extension trick (e.g. invoice.pdf.exe) commonly used in phishing attachments\"\n        level = \"medium\"\n\n    strings:\n        $ext1 = \".pdf.exe\" nocase ascii wide\n        $ext2 = \".doc.exe\" nocase ascii wide\n        $ext3 = \".xls.exe\" nocase ascii wide\n        $ext4 = \".jpg.exe\" nocase ascii wide\n\n    condition:\n        any of them\n}",
+    "description": "Matches on filenames using the classic double-extension disguise, useful when scanning email attachment metadata or a downloads folder.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "phishing",
+      "social-engineering"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "yara-010",
+    "category": "yara",
+    "title": "Generic Reverse Shell String Indicators",
+    "code": "rule Generic_Reverse_Shell_Strings\n{\n    meta:\n        description = \"Detects common strings associated with scripted reverse shells (bash/python/perl one-liners)\"\n        level = \"medium\"\n\n    strings:\n        $s1 = \"/bin/sh -i\" ascii\n        $s2 = \"socket.socket(socket.AF_INET\" ascii\n        $s3 = \"os.dup2(\" ascii\n        $s4 = \"/dev/tcp/\" ascii\n\n    condition:\n        2 of them\n}",
+    "description": "Flags scripts containing common reverse-shell scaffolding strings \u2014 a useful, low-cost triage signature for dropped shell scripts.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "reverse-shell",
+      "malware-analysis"
+    ],
+    "difficulty": "Medium"
+  }
+]

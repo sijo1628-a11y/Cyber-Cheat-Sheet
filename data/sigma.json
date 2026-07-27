@@ -1,0 +1,239 @@
+[
+  {
+    "id": "sigma-001",
+    "category": "sigma",
+    "title": "Suspicious Encoded PowerShell Command",
+    "code": "title: Suspicious Encoded PowerShell Command\nid: a1b2c3d4-0001\nstatus: stable\ndescription: Detects PowerShell execution using the -EncodedCommand parameter, commonly used to obfuscate malicious script content.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\\\powershell.exe'\n        CommandLine|contains:\n            - '-enc'\n            - '-EncodedCommand'\n    condition: selection\nlevel: medium\ntags:\n    - attack.execution\n    - attack.t1059.001",
+    "description": "Detects PowerShell execution using the -EncodedCommand parameter, commonly used to obfuscate malicious script content.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: medium",
+    "tags": [
+      "powershell",
+      "obfuscation",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-002",
+    "category": "sigma",
+    "title": "Mimikatz Process Execution",
+    "code": "title: Mimikatz Process Execution\nid: a1b2c3d4-0002\nstatus: stable\ndescription: Detects execution of mimikatz.exe or common renamed variants by process image name.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith:\n            - '\\\\mimikatz.exe'\n            - '\\\\mimidrv.sys'\n        OriginalFileName: 'mimikatz.exe'\n    condition: selection\nlevel: critical\ntags:\n    - attack.credential_access\n    - attack.t1003",
+    "description": "Detects execution of mimikatz.exe or common renamed variants by process image name.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: critical",
+    "tags": [
+      "credential-access",
+      "windows",
+      "endpoint"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "sigma-003",
+    "category": "sigma",
+    "title": "Multiple Failed SSH Logins (Brute Force)",
+    "code": "title: Multiple Failed SSH Logins (Brute Force)\nid: a1b2c3d4-0003\nstatus: stable\ndescription: Detects a high volume of failed SSH authentication attempts from a single source within a short window.\nlogsource:\n    category: authentication\n    product: linux\n    service: sshd\ndetection:\n    selection:\n        message|contains: 'Failed password'\n    timeframe: 5m\n    condition: selection | count() by src_ip > 10\nlevel: medium\ntags:\n    - attack.credential_access\n    - attack.t1110",
+    "description": "Detects a high volume of failed SSH authentication attempts from a single source within a short window.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: medium",
+    "tags": [
+      "authentication",
+      "brute-force",
+      "linux"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-004",
+    "category": "sigma",
+    "title": "New Local Administrator Account Added",
+    "code": "title: New Local Administrator Account Added\nid: a1b2c3d4-0004\nstatus: stable\ndescription: Detects a user being added to the local Administrators group, EventID 4732 on the domain member or DC.\nlogsource:\n    category: security\n    product: windows\n    service: security\ndetection:\n    selection:\n        EventID: 4732\n        TargetUserName|contains: 'Administrators'\n    condition: selection\nlevel: medium\ntags:\n    - attack.persistence\n    - attack.t1098",
+    "description": "Detects a user being added to the local Administrators group, EventID 4732 on the domain member or DC.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: medium",
+    "tags": [
+      "privesc",
+      "persistence",
+      "windows"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-005",
+    "category": "sigma",
+    "title": "Scheduled Task Creation via schtasks.exe",
+    "code": "title: Scheduled Task Creation via schtasks.exe\nid: a1b2c3d4-0005\nstatus: stable\ndescription: Detects creation of a new scheduled task from the command line, a common persistence technique.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\\\schtasks.exe'\n        CommandLine|contains: '/create'\n    condition: selection\nlevel: low\ntags:\n    - attack.persistence\n    - attack.t1053.005",
+    "description": "Detects creation of a new scheduled task from the command line, a common persistence technique.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: low",
+    "tags": [
+      "persistence",
+      "windows",
+      "endpoint"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "sigma-006",
+    "category": "sigma",
+    "title": "Suspicious Outbound Connection to Known Malicious Port",
+    "code": "title: Suspicious Outbound Connection to Known Malicious Port\nid: a1b2c3d4-0006\nstatus: stable\ndescription: Detects outbound network connections to ports commonly associated with reverse shells (e.g. 4444, 1337, 31337).\nlogsource:\n    category: network_connection\n    product: windows\ndetection:\n    selection:\n        DestinationPort:\n            - 4444\n            - 1337\n            - 31337\n        Initiated: 'true'\n    condition: selection\nlevel: medium\ntags:\n    - attack.command_and_control\n    - attack.t1571",
+    "description": "Detects outbound network connections to ports commonly associated with reverse shells (e.g. 4444, 1337, 31337).",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: medium",
+    "tags": [
+      "network",
+      "c2",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-007",
+    "category": "sigma",
+    "title": "LSASS Process Access (Credential Dumping)",
+    "code": "title: LSASS Process Access (Credential Dumping)\nid: a1b2c3d4-0007\nstatus: stable\ndescription: Detects a process opening a handle to lsass.exe with access rights consistent with credential dumping.\nlogsource:\n    category: process_access\n    product: windows\ndetection:\n    selection:\n        TargetImage|endswith: '\\\\lsass.exe'\n        GrantedAccess: '0x1010'\n    condition: selection\nlevel: high\ntags:\n    - attack.credential_access\n    - attack.t1003.001",
+    "description": "Detects a process opening a handle to lsass.exe with access rights consistent with credential dumping.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: high",
+    "tags": [
+      "credential-access",
+      "windows",
+      "endpoint"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "sigma-008",
+    "category": "sigma",
+    "title": "Disabling Windows Defender via PowerShell",
+    "code": "title: Disabling Windows Defender via PowerShell\nid: a1b2c3d4-0008\nstatus: stable\ndescription: Detects PowerShell commands attempting to disable real-time protection, a common pre-payload defense-evasion step.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\\\powershell.exe'\n        CommandLine|contains: 'Set-MpPreference -DisableRealtimeMonitoring'\n    condition: selection\nlevel: high\ntags:\n    - attack.defense_evasion\n    - attack.t1562.001",
+    "description": "Detects PowerShell commands attempting to disable real-time protection, a common pre-payload defense-evasion step.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: high",
+    "tags": [
+      "defense-evasion",
+      "powershell",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-009",
+    "category": "sigma",
+    "title": "Suspicious Use of certutil to Download File",
+    "code": "title: Suspicious Use of certutil to Download File\nid: a1b2c3d4-0009\nstatus: stable\ndescription: Detects certutil.exe being used with -urlcache or -verifyctl to download a remote file, a common living-off-the-land technique.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\\\certutil.exe'\n        CommandLine|contains:\n            - 'urlcache'\n            - '-verifyctl'\n    condition: selection\nlevel: high\ntags:\n    - attack.command_and_control\n    - attack.t1105",
+    "description": "Detects certutil.exe being used with -urlcache or -verifyctl to download a remote file, a common living-off-the-land technique.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: high",
+    "tags": [
+      "living-off-the-land",
+      "windows",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-010",
+    "category": "sigma",
+    "title": "New Service Installed via sc.exe",
+    "code": "title: New Service Installed via sc.exe\nid: a1b2c3d4-0010\nstatus: stable\ndescription: Detects creation of a new Windows service from the command line, frequently used for persistence.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\\\sc.exe'\n        CommandLine|contains: 'create'\n    condition: selection\nlevel: medium\ntags:\n    - attack.persistence\n    - attack.t1543.003",
+    "description": "Detects creation of a new Windows service from the command line, frequently used for persistence.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: medium",
+    "tags": [
+      "persistence",
+      "windows",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-011",
+    "category": "sigma",
+    "title": "Web Shell Indicator \u2014 Suspicious Child Process of Web Server",
+    "code": "title: Web Shell Indicator \u2014 Suspicious Child Process of Web Server\nid: a1b2c3d4-0011\nstatus: stable\ndescription: Detects a shell (cmd.exe/powershell.exe/bash) spawned as a child process of a web server process, a strong web-shell indicator.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith:\n            - '\\\\w3wp.exe'\n            - '\\\\httpd.exe'\n            - '\\\\nginx.exe'\n        Image|endswith:\n            - '\\\\cmd.exe'\n            - '\\\\powershell.exe'\n    condition: selection\nlevel: high\ntags:\n    - attack.persistence\n    - attack.t1505.003",
+    "description": "Detects a shell (cmd.exe/powershell.exe/bash) spawned as a child process of a web server process, a strong web-shell indicator.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: high",
+    "tags": [
+      "web-shell",
+      "endpoint"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "sigma-012",
+    "category": "sigma",
+    "title": "Clearing of Windows Event Logs",
+    "code": "title: Clearing of Windows Event Logs\nid: a1b2c3d4-0012\nstatus: stable\ndescription: Detects use of wevtutil.exe to clear an event log, a common anti-forensic action taken after an intrusion.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        Image|endswith: '\\\\wevtutil.exe'\n        CommandLine|contains: 'cl '\n    condition: selection\nlevel: high\ntags:\n    - attack.defense_evasion\n    - attack.t1070.001",
+    "description": "Detects use of wevtutil.exe to clear an event log, a common anti-forensic action taken after an intrusion.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: high",
+    "tags": [
+      "anti-forensics",
+      "windows",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-013",
+    "category": "sigma",
+    "title": "Rare Parent-Child Process \u2014 Office Spawning Shell",
+    "code": "title: Rare Parent-Child Process \u2014 Office Spawning Shell\nid: a1b2c3d4-0013\nstatus: stable\ndescription: Detects an Office application (Word/Excel/Outlook) spawning a command shell, a classic sign of a malicious macro.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        ParentImage|endswith:\n            - '\\\\winword.exe'\n            - '\\\\excel.exe'\n            - '\\\\outlook.exe'\n        Image|endswith:\n            - '\\\\cmd.exe'\n            - '\\\\powershell.exe'\n    condition: selection\nlevel: high\ntags:\n    - attack.execution\n    - attack.t1204.002",
+    "description": "Detects an Office application (Word/Excel/Outlook) spawning a command shell, a classic sign of a malicious macro.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: high",
+    "tags": [
+      "phishing",
+      "endpoint"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "sigma-014",
+    "category": "sigma",
+    "title": "Suspicious Base64-Encoded Command Line",
+    "code": "title: Suspicious Base64-Encoded Command Line\nid: a1b2c3d4-0014\nstatus: stable\ndescription: Detects command lines containing a long base64-looking string, often indicating an encoded/obfuscated payload.\nlogsource:\n    category: process_creation\n    product: windows\ndetection:\n    selection:\n        CommandLine|re: '[A-Za-z0-9+/=]{100,}'\n    condition: selection\nlevel: medium\ntags:\n    - attack.defense_evasion\n    - attack.t1027",
+    "description": "Detects command lines containing a long base64-looking string, often indicating an encoded/obfuscated payload.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: medium",
+    "tags": [
+      "obfuscation",
+      "endpoint"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "sigma-015",
+    "category": "sigma",
+    "title": "RDP Brute Force Followed by Successful Logon",
+    "code": "title: RDP Brute Force Followed by Successful Logon\nid: a1b2c3d4-0015\nstatus: stable\ndescription: Detects a burst of failed RDP logons (4625) from one source followed by a success (4624) \u2014 a brute-force-then-compromise pattern.\nlogsource:\n    category: security\n    product: windows\n    service: security\ndetection:\n    selection_fail:\n        EventID: 4625\n        LogonType: 10\n    selection_success:\n        EventID: 4624\n        LogonType: 10\n    timeframe: 10m\n    condition: selection_fail | count() by IpAddress > 10 and selection_success\nlevel: high\ntags:\n    - attack.credential_access\n    - attack.t1110",
+    "description": "Detects a burst of failed RDP logons (4625) from one source followed by a success (4624) \u2014 a brute-force-then-compromise pattern.",
+    "example": "",
+    "output": "",
+    "notes": "Sigma level: high",
+    "tags": [
+      "authentication",
+      "brute-force",
+      "windows"
+    ],
+    "difficulty": "Hard"
+  }
+]

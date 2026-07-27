@@ -1,0 +1,529 @@
+[
+  {
+    "id": "kql-001",
+    "category": "kql",
+    "title": "Basic table query",
+    "code": "SigninLogs",
+    "description": "Return all recent rows from the SigninLogs table \u2014 the starting point for any Sentinel query.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-002",
+    "category": "kql",
+    "title": "Filter with where",
+    "code": "SigninLogs | where ResultType != 0",
+    "description": "Filter rows using a boolean condition; ResultType != 0 isolates failed sign-ins.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "authentication"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-003",
+    "category": "kql",
+    "title": "Project specific columns",
+    "code": "SigninLogs | project TimeGenerated, UserPrincipalName, IPAddress, ResultType",
+    "description": "Select and reorder only the columns you need, discarding the rest.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-004",
+    "category": "kql",
+    "title": "Count rows",
+    "code": "SigninLogs | count",
+    "description": "Return the total number of matching rows.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-005",
+    "category": "kql",
+    "title": "Summarize count by field",
+    "code": "SigninLogs | summarize count() by UserPrincipalName",
+    "description": "Aggregate rows, counting occurrences grouped by a field.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-006",
+    "category": "kql",
+    "title": "Time range filter",
+    "code": "SigninLogs | where TimeGenerated > ago(24h)",
+    "description": "Restrict results to a relative time window \u2014 here, the last 24 hours.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-007",
+    "category": "kql",
+    "title": "Sort results",
+    "code": "SigninLogs | sort by TimeGenerated desc",
+    "description": "Order results by a column, descending by default with 'desc'.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-008",
+    "category": "kql",
+    "title": "Top N results",
+    "code": "SigninLogs | top 10 by TimeGenerated desc",
+    "description": "Return only the top N rows after sorting \u2014 more efficient than sort + take.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-009",
+    "category": "kql",
+    "title": "Distinct values",
+    "code": "SigninLogs | distinct UserPrincipalName",
+    "description": "Return each unique value of a column once, removing duplicates.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-010",
+    "category": "kql",
+    "title": "Failed sign-ins by user, threshold",
+    "code": "SigninLogs | where ResultType != 0 | summarize FailCount=count() by UserPrincipalName | where FailCount > 10",
+    "description": "Count failed sign-ins per user and surface only accounts exceeding a threshold \u2014 a simple brute-force detector.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "authentication",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-011",
+    "category": "kql",
+    "title": "Impossible travel style query",
+    "code": "SigninLogs | where ResultType == 0 | summarize makeset(Location) by UserPrincipalName, bin(TimeGenerated, 1h)",
+    "description": "Group successful sign-in locations per user per hour, useful as a building block for impossible-travel detection logic.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "authentication",
+      "threat-hunting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-012",
+    "category": "kql",
+    "title": "DeviceProcessEvents basic query",
+    "code": "DeviceProcessEvents | where FileName == \"powershell.exe\"",
+    "description": "Search Microsoft Defender for Endpoint process-execution telemetry for a specific process name.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "endpoint",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-013",
+    "category": "kql",
+    "title": "Suspicious PowerShell command line",
+    "code": "DeviceProcessEvents | where ProcessCommandLine has \"-enc\"",
+    "description": "Flag PowerShell invocations using the -EncodedCommand switch, commonly used to obscure malicious script content.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "endpoint",
+      "threat-hunting",
+      "powershell"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-014",
+    "category": "kql",
+    "title": "DeviceNetworkEvents basic query",
+    "code": "DeviceNetworkEvents | where RemotePort == 4444",
+    "description": "Search Defender network-connection telemetry for connections to a specific remote port, e.g. a common reverse-shell port.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "endpoint",
+      "network",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-015",
+    "category": "kql",
+    "title": "DeviceFileEvents basic query",
+    "code": "DeviceFileEvents | where FileName endswith \".ps1\"",
+    "description": "Search Defender file-creation/modification telemetry for files with a specific extension.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "endpoint",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-016",
+    "category": "kql",
+    "title": "DeviceLogonEvents basic query",
+    "code": "DeviceLogonEvents | where ActionType == \"LogonFailed\"",
+    "description": "Search Defender endpoint logon telemetry for failed local/RDP logons.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "endpoint",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-017",
+    "category": "kql",
+    "title": "SecurityEvent 4625 (failed logon)",
+    "code": "SecurityEvent | where EventID == 4625",
+    "description": "Search the legacy SecurityEvent table (from the Windows Security event log connector) for failed-logon events.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "windows",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-018",
+    "category": "kql",
+    "title": "SecurityEvent 4688 (process creation)",
+    "code": "SecurityEvent | where EventID == 4688",
+    "description": "Search for Windows process-creation audit events (requires command-line auditing enabled via GPO).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "windows",
+      "endpoint",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-019",
+    "category": "kql",
+    "title": "Heartbeat \u2014 list connected agents",
+    "code": "Heartbeat | distinct Computer",
+    "description": "List every computer that has an active Log Analytics/Sentinel agent reporting in.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "asset-inventory"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-020",
+    "category": "kql",
+    "title": "AzureActivity \u2014 resource deletions",
+    "code": "AzureActivity | where OperationNameValue has \"delete\"",
+    "description": "Search Azure control-plane activity logs for delete operations across subscriptions/resources.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "cloud",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-021",
+    "category": "kql",
+    "title": "AzureActivity by caller",
+    "code": "AzureActivity | summarize count() by Caller",
+    "description": "Count Azure control-plane operations grouped by the identity that performed them.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "cloud",
+      "stats"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-022",
+    "category": "kql",
+    "title": "Join two tables",
+    "code": "SigninLogs | join kind=inner (DeviceLogonEvents) on $left.UserPrincipalName == $right.AccountName",
+    "description": "Correlate Azure AD sign-in events with endpoint logon events sharing a common identity field.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "join"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-023",
+    "category": "kql",
+    "title": "Summarize with bin (time bucketing)",
+    "code": "SigninLogs | summarize count() by bin(TimeGenerated, 1h)",
+    "description": "Bucket a summarize aggregation into fixed time intervals, similar to a GROUP BY on a rounded timestamp.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "stats",
+      "visualization"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-024",
+    "category": "kql",
+    "title": "Render a time chart",
+    "code": "SigninLogs | summarize count() by bin(TimeGenerated, 1h) | render timechart",
+    "description": "Aggregate and immediately visualize the result as a time-series chart in the Sentinel/Log Analytics UI.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "visualization"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-025",
+    "category": "kql",
+    "title": "Extract with parse",
+    "code": "AzureActivity | parse OperationNameValue with * \"/\" resourceType \"/\" action",
+    "description": "Extract structured substrings out of a text field using positional pattern matching.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "fields"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-026",
+    "category": "kql",
+    "title": "Regex extract",
+    "code": "SecurityEvent | extend IP = extract(@\"(\\d{1,3}\\.){3}\\d{1,3}\", 0, EventData)",
+    "description": "Extract a substring matching a regular expression into a new computed column.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "fields",
+      "regex"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-027",
+    "category": "kql",
+    "title": "Let statement for reusable value",
+    "code": "let threshold = 10; SigninLogs | where ResultType != 0 | summarize FailCount=count() by UserPrincipalName | where FailCount > threshold",
+    "description": "Define a reusable variable at the top of a query for readability and easy tuning.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-028",
+    "category": "kql",
+    "title": "Union multiple tables",
+    "code": "union SecurityEvent, DeviceLogonEvents | where TimeGenerated > ago(1h)",
+    "description": "Combine rows from multiple tables with different but overlapping schemas into a single result set.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "join"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-029",
+    "category": "kql",
+    "title": "Materialize repeated subquery",
+    "code": "let recentFails = materialize(SigninLogs | where ResultType != 0); recentFails | count",
+    "description": "Cache the result of an expensive subquery so it isn't recomputed each time it's referenced later in the query.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "performance"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-030",
+    "category": "kql",
+    "title": "Anomaly detection \u2014 series_decompose",
+    "code": "SigninLogs | make-series Count=count() default=0 on TimeGenerated in range(ago(7d), now(), 1h) | extend anomalies = series_decompose_anomalies(Count)",
+    "description": "Build a time series and flag statistical anomalies using KQL's built-in decomposition function.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "threat-hunting",
+      "stats"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-031",
+    "category": "kql",
+    "title": "Watchlist lookup",
+    "code": "SigninLogs | lookup kind=leftouter (_GetWatchlist('HighRiskIPs')) on $left.IPAddress == $right.IPAddress",
+    "description": "Enrich results by joining against a Sentinel watchlist (e.g. a maintained list of high-risk IPs).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "lookup",
+      "threat-hunting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "kql-032",
+    "category": "kql",
+    "title": "IdentityLogonEvents (Defender for Identity)",
+    "code": "IdentityLogonEvents | where ActionType == \"LogonFailed\"",
+    "description": "Search Microsoft Defender for Identity telemetry for on-prem AD authentication failures.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "active-directory",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-033",
+    "category": "kql",
+    "title": "EmailEvents (Defender for Office 365)",
+    "code": "EmailEvents | where ThreatTypes has \"Phish\"",
+    "description": "Search Defender for Office 365 email telemetry for messages flagged as phishing.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "email",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-034",
+    "category": "kql",
+    "title": "AlertInfo basic query",
+    "code": "AlertInfo | where Severity == \"High\"",
+    "description": "Search the unified Microsoft 365 Defender alert table for high-severity alerts.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "alerts"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "kql-035",
+    "category": "kql",
+    "title": "Count distinct devices contacted an IP",
+    "code": "DeviceNetworkEvents | where RemoteIP == \"185.220.101.4\" | summarize dcount(DeviceName)",
+    "description": "Count how many distinct devices in the environment connected to a specific external IP \u2014 useful for scoping the blast radius of an IOC.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "threat-hunting",
+      "network"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "kql-036",
+    "category": "kql",
+    "title": "Case statement",
+    "code": "SigninLogs | extend RiskLabel = case(ResultType == 0, \"Success\", ResultType == 50126, \"BadPassword\", \"Other\")",
+    "description": "Create a computed column with multiple conditional branches, similar to a SQL CASE expression.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "fields"
+    ],
+    "difficulty": "Medium"
+  }
+]

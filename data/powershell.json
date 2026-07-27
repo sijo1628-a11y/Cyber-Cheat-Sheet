@@ -1,0 +1,559 @@
+[
+  {
+    "id": "powershell-001",
+    "category": "powershell",
+    "title": "Get-Process",
+    "code": "Get-Process | Sort CPU -Descending",
+    "description": "List running processes as objects, sortable/filterable by any property.",
+    "example": "Get-Process | Where-Object {$_.CPU -gt 100}",
+    "output": "Handles  CPU(s)  Id  ProcessName\n412     345.2  4021 chrome",
+    "notes": "Everything returned is a live .NET object \u2014 pipe into Select-Object to pick just the properties you need.",
+    "tags": [
+      "system",
+      "process-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-002",
+    "category": "powershell",
+    "title": "Get-Service",
+    "code": "Get-Service | Where Status -eq Running",
+    "description": "List Windows services and their current status.",
+    "example": "Get-Service -Name wuauserv | Select Status,StartType",
+    "output": "",
+    "notes": "Set-Service can change StartType, e.g. disabling an unnecessary service.",
+    "tags": [
+      "system",
+      "services"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-003",
+    "category": "powershell",
+    "title": "Get-EventLog",
+    "code": "Get-EventLog -LogName Security -Newest 20",
+    "description": "Query classic (pre-Vista style) Windows event logs.",
+    "example": "Get-EventLog Security -InstanceId 4625 -Newest 10",
+    "output": "",
+    "notes": "Deprecated in favor of Get-WinEvent, which supports the newer .evtx structured logs and is faster on large logs.",
+    "tags": [
+      "logging",
+      "forensics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-004",
+    "category": "powershell",
+    "title": "Get-WinEvent",
+    "code": "Get-WinEvent -LogName Security -MaxEvents 50",
+    "description": "Query the modern Windows Event Log (including custom/application logs) via structured XML.",
+    "example": "Get-WinEvent -FilterHashtable @{LogName='Security';Id=4625} -MaxEvents 20",
+    "output": "",
+    "notes": "FilterHashtable is far faster than piping to Where-Object because filtering happens at the log-provider level.",
+    "tags": [
+      "logging",
+      "forensics"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "powershell-005",
+    "category": "powershell",
+    "title": "Test-NetConnection",
+    "code": "Test-NetConnection host -Port 443",
+    "description": "Test connectivity to a host/port, replacing ping+telnet for quick checks.",
+    "example": "Test-NetConnection 10.0.0.5 -Port 3389",
+    "output": "ComputerName : 10.0.0.5\nTcpTestSucceeded : True",
+    "notes": "-TraceRoute adds hop-by-hop path info to the same output.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-006",
+    "category": "powershell",
+    "title": "Get-ChildItem",
+    "code": "Get-ChildItem -Recurse -Force",
+    "description": "List items in a container (files/registry/etc). -Force shows hidden items, -Recurse descends subfolders.",
+    "example": "Get-ChildItem C:\\Users -Recurse -Filter *.ps1 -ErrorAction SilentlyContinue",
+    "output": "",
+    "notes": "'gci' and 'ls' are built-in aliases for this cmdlet.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-007",
+    "category": "powershell",
+    "title": "Copy-Item",
+    "code": "Copy-Item src dst -Recurse",
+    "description": "Copy files, folders, or other provider items (registry, cert store).",
+    "example": "Copy-Item C:\\Data -Destination D:\\Backup -Recurse -Force",
+    "output": "",
+    "notes": "Works across PS providers, e.g. copying a registry key: Copy-Item HKLM:\\...\\Run HKCU:\\...\\Run.",
+    "tags": [
+      "filesystem"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-008",
+    "category": "powershell",
+    "title": "Move-Item",
+    "code": "Move-Item src dst",
+    "description": "Move or rename files, folders, or other provider items.",
+    "example": "Move-Item report.txt archive\\report_2026.txt",
+    "output": "",
+    "notes": "Combine with -WhatIf to preview the operation before executing it for real.",
+    "tags": [
+      "filesystem"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-009",
+    "category": "powershell",
+    "title": "Remove-Item",
+    "code": "Remove-Item path -Recurse -Force",
+    "description": "Delete files, folders, or other provider items.",
+    "example": "Remove-Item C:\\Temp\\* -Recurse -Force -Confirm:$false",
+    "output": "",
+    "notes": "-WhatIf shows what would be deleted without actually deleting \u2014 always test destructive scripts this way first.",
+    "tags": [
+      "filesystem"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-010",
+    "category": "powershell",
+    "title": "New-Item",
+    "code": "New-Item -Path C:\\x -ItemType Directory",
+    "description": "Create a new file, directory, symlink, or other provider item.",
+    "example": "New-Item -ItemType File -Path C:\\Temp\\notes.txt",
+    "output": "",
+    "notes": "-ItemType SymbolicLink creates a symlink (requires elevated privileges or Developer Mode).",
+    "tags": [
+      "filesystem"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-011",
+    "category": "powershell",
+    "title": "Get-ADUser",
+    "code": "Get-ADUser -Filter *",
+    "description": "Query Active Directory user objects (requires the RSAT ActiveDirectory module).",
+    "example": "Get-ADUser -Filter {Enabled -eq $false} -Properties LastLogonDate",
+    "output": "",
+    "notes": "-Properties * pulls every AD attribute, but is slower \u2014 only request what you need in large domains.",
+    "tags": [
+      "active-directory"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-012",
+    "category": "powershell",
+    "title": "Invoke-WebRequest",
+    "code": "Invoke-WebRequest -Uri url",
+    "description": "Send an HTTP/HTTPS request and return the response object (headers, content, status).",
+    "example": "Invoke-WebRequest -Uri https://example.com -Method GET | Select StatusCode",
+    "output": "StatusCode : 200",
+    "notes": "Invoke-RestMethod is the sibling cmdlet that auto-parses JSON/XML responses instead of returning raw HTML.",
+    "tags": [
+      "networking"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-013",
+    "category": "powershell",
+    "title": "Get-LocalUser",
+    "code": "Get-LocalUser",
+    "description": "List local user accounts (modern replacement for 'net user').",
+    "example": "Get-LocalUser | Where {$_.Enabled -eq $true}",
+    "output": "",
+    "notes": "Pairs with Get-LocalGroupMember to audit local Administrators group membership.",
+    "tags": [
+      "system",
+      "user-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-014",
+    "category": "powershell",
+    "title": "Get-LocalGroupMember",
+    "code": "Get-LocalGroupMember Administrators",
+    "description": "List members of a local group.",
+    "example": "Get-LocalGroupMember -Group Administrators",
+    "output": "ObjectClass Name\nUser  WIN-SOC01\\analyst",
+    "notes": "Unexpected members here are a very common privilege-escalation / persistence finding.",
+    "tags": [
+      "system",
+      "user-management",
+      "privesc"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-015",
+    "category": "powershell",
+    "title": "Set-ExecutionPolicy",
+    "code": "Set-ExecutionPolicy RemoteSigned",
+    "description": "Configure the script-execution restriction level for the current session/machine.",
+    "example": "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass",
+    "output": "",
+    "notes": "Execution policy is a safety rail, not a security boundary \u2014 it can be bypassed with -ExecutionPolicy Bypass by design.",
+    "tags": [
+      "system",
+      "scripting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-016",
+    "category": "powershell",
+    "title": "Get-Content",
+    "code": "Get-Content file.log -Tail 50",
+    "description": "Read the contents of a file (Windows equivalent of cat/tail).",
+    "example": "Get-Content C:\\logs\\app.log -Wait -Tail 20",
+    "output": "",
+    "notes": "-Wait behaves like 'tail -f', streaming new lines as they are appended.",
+    "tags": [
+      "text",
+      "log-analysis"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-017",
+    "category": "powershell",
+    "title": "Select-String",
+    "code": "Select-String -Path *.log -Pattern err",
+    "description": "Search text/files for a regex pattern (PowerShell's grep).",
+    "example": "Select-String -Path C:\\logs\\*.log -Pattern 'Failed password' -CaseSensitive",
+    "output": "app.log:412:Jul 26 03:14 Failed password for root",
+    "notes": "-Context 2,2 shows two lines of context before/after each match.",
+    "tags": [
+      "text",
+      "log-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-018",
+    "category": "powershell",
+    "title": "Get-Item / Set-ItemProperty",
+    "code": "Get-Item HKLM:\\...",
+    "description": "Read or write registry values through the Registry PS provider.",
+    "example": "Set-ItemProperty -Path 'HKCU:\\Software\\Test' -Name Value -Value 1",
+    "output": "",
+    "notes": "HKLM: and HKCU: are pre-mounted PSDrives, so you navigate the registry like a filesystem.",
+    "tags": [
+      "registry"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-019",
+    "category": "powershell",
+    "title": "Get-NetTCPConnection",
+    "code": "Get-NetTCPConnection -State Established",
+    "description": "List active TCP connections as objects, with the owning process ID.",
+    "example": "Get-NetTCPConnection -State Listen | Select LocalPort,OwningProcess",
+    "output": "",
+    "notes": "Pipe OwningProcess into Get-Process -Id to resolve it to a process name in one line.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-020",
+    "category": "powershell",
+    "title": "Get-FileHash",
+    "code": "Get-FileHash file -Algorithm SHA256",
+    "description": "Compute a cryptographic hash of a file \u2014 the built-in PowerShell equivalent of sha256sum.",
+    "example": "Get-FileHash C:\\sample.exe -Algorithm SHA256",
+    "output": "Hash: 3A7BD3E2360A3D...",
+    "notes": "Default algorithm is SHA256; MD5/SHA1 are also supported but weaker.",
+    "tags": [
+      "forensics",
+      "cryptography"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-021",
+    "category": "powershell",
+    "title": "Get-ScheduledTask",
+    "code": "Get-ScheduledTask",
+    "description": "List scheduled tasks as objects, replacing schtasks for scripting scenarios.",
+    "example": "Get-ScheduledTask | Where State -eq Ready",
+    "output": "",
+    "notes": "Get-ScheduledTaskInfo adds LastRunTime/NextRunTime \u2014 useful for spotting stealthy persistence tasks.",
+    "tags": [
+      "system",
+      "persistence"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-022",
+    "category": "powershell",
+    "title": "Get-Acl / Set-Acl",
+    "code": "Get-Acl file",
+    "description": "View or set NTFS/registry access control lists as objects.",
+    "example": "Get-Acl C:\\Cases | Format-List",
+    "output": "",
+    "notes": "Set-Acl requires an ACL object, typically built by editing the output of Get-Acl and piping it back.",
+    "tags": [
+      "filesystem",
+      "permissions"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "powershell-023",
+    "category": "powershell",
+    "title": "ConvertTo-Json / ConvertFrom-Json",
+    "code": "$obj | ConvertTo-Json",
+    "description": "Serialize PowerShell objects to/from JSON, useful for logging and API interop.",
+    "example": "Get-Process | Select Name,Id | ConvertTo-Json",
+    "output": "",
+    "notes": "-Depth controls how deeply nested objects are serialized; the default (2) truncates complex objects silently.",
+    "tags": [
+      "scripting"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-024",
+    "category": "powershell",
+    "title": "Export-Csv / Import-Csv",
+    "code": "Get-Process | Export-Csv out.csv",
+    "description": "Write/read objects to/from CSV, a common way to hand data off to spreadsheets.",
+    "example": "Get-Service | Export-Csv services.csv -NoTypeInformation",
+    "output": "",
+    "notes": "-NoTypeInformation removes the '#TYPE' header line that Excel otherwise chokes on.",
+    "tags": [
+      "scripting"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-025",
+    "category": "powershell",
+    "title": "Invoke-Command",
+    "code": "Invoke-Command -ComputerName h -ScriptBlock {}",
+    "description": "Run a script block on one or more remote computers via WinRM (PS Remoting).",
+    "example": "Invoke-Command -ComputerName SRV01,SRV02 -ScriptBlock {Get-Process}",
+    "output": "",
+    "notes": "Requires PS Remoting enabled (Enable-PSRemoting) and appropriate WinRM firewall rules on the target.",
+    "tags": [
+      "remote-access",
+      "scripting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "powershell-026",
+    "category": "powershell",
+    "title": "Get-Hotfix",
+    "code": "Get-HotFix | Sort InstalledOn",
+    "description": "List installed Windows updates/hotfixes.",
+    "example": "Get-HotFix | Where {$_.InstalledOn -gt (Get-Date).AddDays(-30)}",
+    "output": "",
+    "notes": "Cross-reference HotFixID values against a CVE's KB number during patch-compliance checks.",
+    "tags": [
+      "system",
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-027",
+    "category": "powershell",
+    "title": "Get-WmiObject / Get-CimInstance",
+    "code": "Get-CimInstance Win32_OperatingSystem",
+    "description": "Query WMI/CIM classes for system, hardware and OS information (CimInstance is the modern, faster cmdlet).",
+    "example": "Get-CimInstance Win32_Process | Select Name,ProcessId,ParentProcessId",
+    "output": "",
+    "notes": "Win32_Process includes ParentProcessId, letting you reconstruct a process tree without extra tools.",
+    "tags": [
+      "system",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-028",
+    "category": "powershell",
+    "title": "Start-Process / Stop-Process",
+    "code": "Stop-Process -Name notepad -Force",
+    "description": "Launch or terminate processes from PowerShell.",
+    "example": "Start-Process powershell -Verb RunAs",
+    "output": "",
+    "notes": "-Verb RunAs launches the process elevated, triggering a UAC prompt.",
+    "tags": [
+      "system",
+      "process-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-029",
+    "category": "powershell",
+    "title": "Get-Random",
+    "code": "Get-Random -Minimum 1 -Maximum 100",
+    "description": "Generate a pseudo-random number or pick a random item from a collection.",
+    "example": "1..10 | Get-Random -Count 3",
+    "output": "",
+    "notes": "Not cryptographically secure \u2014 use [System.Security.Cryptography.RandomNumberGenerator] for that.",
+    "tags": [
+      "scripting"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-030",
+    "category": "powershell",
+    "title": "Where-Object / ForEach-Object",
+    "code": "cmd | Where {} | ForEach {}",
+    "description": "Filter (Where-Object) and iterate (ForEach-Object) over pipeline objects \u2014 the workhorses of PS scripting.",
+    "example": "Get-Process | Where-Object {$_.WS -gt 100MB} | ForEach-Object {$_.Name}",
+    "output": "",
+    "notes": "$_ refers to the current pipeline object inside the script block.",
+    "tags": [
+      "scripting",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-031",
+    "category": "powershell",
+    "title": "Compare-Object",
+    "code": "Compare-Object $a $b",
+    "description": "Compare two collections and show the differences between them.",
+    "example": "Compare-Object (Get-Content old.txt) (Get-Content new.txt)",
+    "output": "InputObject SideIndicator\nnew line     =>",
+    "notes": "'=>' marks items only in the second set, '<=' only in the first \u2014 handy for diffing config baselines.",
+    "tags": [
+      "scripting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-032",
+    "category": "powershell",
+    "title": "Get-Credential",
+    "code": "$c = Get-Credential",
+    "description": "Prompt the user securely for a username/password, returning a PSCredential object.",
+    "example": "$cred = Get-Credential; Invoke-Command -ComputerName SRV01 -Credential $cred -ScriptBlock {whoami}",
+    "output": "",
+    "notes": "Never hardcode plaintext passwords in scripts \u2014 use Get-Credential or a secrets vault instead.",
+    "tags": [
+      "authentication",
+      "scripting"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-033",
+    "category": "powershell",
+    "title": "New-PSSession / Enter-PSSession",
+    "code": "Enter-PSSession -ComputerName h",
+    "description": "Open an interactive remote PowerShell session over WinRM.",
+    "example": "Enter-PSSession -ComputerName SRV01",
+    "output": "[SRV01]: PS C:\\>",
+    "notes": "Exit-PSSession or 'exit' returns you to the local session.",
+    "tags": [
+      "remote-access"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-034",
+    "category": "powershell",
+    "title": "Get-Module / Import-Module",
+    "code": "Get-Module -ListAvailable",
+    "description": "List loaded or installable PowerShell modules; Import-Module loads one into the session.",
+    "example": "Import-Module ActiveDirectory",
+    "output": "",
+    "notes": "'Get-Module -ListAvailable' shows every module installed on disk, not just currently loaded ones.",
+    "tags": [
+      "scripting"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-035",
+    "category": "powershell",
+    "title": "Set-MpPreference / Get-MpThreatDetection",
+    "code": "Get-MpThreatDetection",
+    "description": "Query or configure Windows Defender (the built-in antimalware engine).",
+    "example": "Get-MpThreatDetection | Select ThreatName,DetectionTime",
+    "output": "",
+    "notes": "Get-MpComputerStatus shows whether real-time protection and signature updates are current.",
+    "tags": [
+      "system",
+      "malware-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "powershell-036",
+    "category": "powershell",
+    "title": "Get-DnsClientCache",
+    "code": "Get-DnsClientCache",
+    "description": "View the local DNS resolver cache as objects (modern replacement for 'ipconfig /displaydns').",
+    "example": "Get-DnsClientCache | Where Name -like '*evil*'",
+    "output": "",
+    "notes": "Clear-DnsClientCache is the object-cmdlet equivalent of 'ipconfig /flushdns'.",
+    "tags": [
+      "networking",
+      "dns"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-037",
+    "category": "powershell",
+    "title": "Get-Clipboard / Set-Clipboard",
+    "code": "Get-Clipboard",
+    "description": "Read or write the Windows clipboard contents from a script.",
+    "example": "Get-Clipboard | Out-File clip.txt",
+    "output": "",
+    "notes": "Attackers occasionally harvest clipboard contents \u2014 this cmdlet is the built-in, no-download way to inspect it during triage.",
+    "tags": [
+      "forensics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "powershell-038",
+    "category": "powershell",
+    "title": "Test-Path",
+    "code": "Test-Path C:\\file.txt",
+    "description": "Check whether a file, folder, or registry path exists, returning $true/$false.",
+    "example": "if (Test-Path C:\\malware.exe) { Remove-Item C:\\malware.exe }",
+    "output": "",
+    "notes": "Works across every PS provider (filesystem, registry, cert store), not just the filesystem.",
+    "tags": [
+      "scripting",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  }
+]

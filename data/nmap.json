@@ -1,0 +1,457 @@
+[
+  {
+    "id": "nmap-001",
+    "category": "nmap",
+    "title": "Basic TCP connect scan",
+    "code": "nmap target",
+    "description": "Default SYN scan against the top 1000 most common TCP ports (requires no special privileges when run as an ordinary user, falls back to connect scan).",
+    "example": "nmap 10.0.0.5",
+    "output": "Not shown: 997 closed ports\nPORT   STATE SERVICE\n22/tcp open  ssh",
+    "notes": "Always confirm you are authorized to scan the target before running any scan.",
+    "tags": [
+      "basics",
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-002",
+    "category": "nmap",
+    "title": "Scan specific ports",
+    "code": "nmap -p 22,80,443 target",
+    "description": "Restrict the scan to a specific comma-separated list of ports.",
+    "example": "nmap -p 22,80,443 10.0.0.5",
+    "output": "",
+    "notes": "-p- scans all 65535 TCP ports; -p1-1024 scans a range.",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-003",
+    "category": "nmap",
+    "title": "Scan all 65535 ports",
+    "code": "nmap -p- target",
+    "description": "Scan every TCP port instead of just the default top-1000.",
+    "example": "nmap -p- -T4 10.0.0.5",
+    "output": "",
+    "notes": "Slow on large ranges \u2014 combine with -T4 and consider --min-rate to speed it up.",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-004",
+    "category": "nmap",
+    "title": "Service/version detection",
+    "code": "nmap -sV target",
+    "description": "Probe open ports to determine the service name and version running on them.",
+    "example": "nmap -sV -p 80,443 10.0.0.5",
+    "output": "80/tcp open http Apache httpd 2.4.58",
+    "notes": "--version-intensity 0-9 trades scan speed against probe thoroughness.",
+    "tags": [
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-005",
+    "category": "nmap",
+    "title": "OS detection",
+    "code": "nmap -O target",
+    "description": "Attempt to fingerprint the target's operating system from TCP/IP stack behavior.",
+    "example": "nmap -O 10.0.0.5",
+    "output": "OS details: Linux 5.X - 6.X",
+    "notes": "Requires at least one open and one closed port for reliable results; needs root/administrator privileges.",
+    "tags": [
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-006",
+    "category": "nmap",
+    "title": "Aggressive scan",
+    "code": "nmap -A target",
+    "description": "Enables OS detection, version detection, script scanning, and traceroute in one flag.",
+    "example": "nmap -A 10.0.0.5",
+    "output": "",
+    "notes": "Very noisy on the wire and easily flagged by IDS \u2014 use in authorized assessments only.",
+    "tags": [
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-007",
+    "category": "nmap",
+    "title": "SYN stealth scan",
+    "code": "nmap -sS target",
+    "description": "Half-open TCP scan that never completes the 3-way handshake, historically 'stealthier' and faster than a full connect.",
+    "example": "sudo nmap -sS 10.0.0.5",
+    "output": "",
+    "notes": "Requires raw-socket privileges (root/administrator).",
+    "tags": [
+      "stealth"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-008",
+    "category": "nmap",
+    "title": "UDP scan",
+    "code": "nmap -sU target",
+    "description": "Scan UDP ports, which have no handshake and are inherently slower/less reliable to scan than TCP.",
+    "example": "nmap -sU -p 53,161,500 10.0.0.5",
+    "output": "53/udp open dns",
+    "notes": "UDP scans are much slower \u2014 narrow the port list rather than scanning all 65535 UDP ports.",
+    "tags": [
+      "udp"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-009",
+    "category": "nmap",
+    "title": "TCP connect scan",
+    "code": "nmap -sT target",
+    "description": "Full TCP three-way-handshake scan; the fallback scan type for unprivileged users.",
+    "example": "nmap -sT 10.0.0.5",
+    "output": "",
+    "notes": "More detectable than -sS since it completes full connections that get logged by the target.",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-010",
+    "category": "nmap",
+    "title": "FIN scan",
+    "code": "nmap -sF target",
+    "description": "Stealth scan sending only a FIN flag; some stateless firewalls fail to block it since no SYN is sent.",
+    "example": "nmap -sF 10.0.0.5",
+    "output": "",
+    "notes": "Doesn't work reliably against modern Windows TCP/IP stacks, which ignore the FIN probe.",
+    "tags": [
+      "stealth"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-011",
+    "category": "nmap",
+    "title": "Null scan",
+    "code": "nmap -sN target",
+    "description": "Sends TCP packets with no flags set at all, another firewall/IDS-evasion technique.",
+    "example": "nmap -sN 10.0.0.5",
+    "output": "",
+    "notes": "Like -sF/-sX, relies on RFC 793 behavior that not all stacks correctly implement.",
+    "tags": [
+      "stealth"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-012",
+    "category": "nmap",
+    "title": "Xmas scan",
+    "code": "nmap -sX target",
+    "description": "Sends packets with the FIN, PSH and URG flags set (lit up like a Christmas tree).",
+    "example": "nmap -sX 10.0.0.5",
+    "output": "",
+    "notes": "Purely for evasion against older/misconfigured stateless filters; unreliable against modern hosts.",
+    "tags": [
+      "stealth"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-013",
+    "category": "nmap",
+    "title": "Ping scan (host discovery only)",
+    "code": "nmap -sn subnet",
+    "description": "Discover live hosts on a subnet without port-scanning them.",
+    "example": "nmap -sn 10.0.0.0/24",
+    "output": "Nmap scan report for 10.0.0.5\nHost is up (0.002s latency).",
+    "notes": "Fast first step before running a detailed scan against only the hosts that responded.",
+    "tags": [
+      "recon",
+      "host-discovery"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-014",
+    "category": "nmap",
+    "title": "Skip host discovery",
+    "code": "nmap -Pn target",
+    "description": "Treat every target as online and skip the initial ping check \u2014 needed when ICMP is blocked.",
+    "example": "nmap -Pn -p 80 10.0.0.5",
+    "output": "",
+    "notes": "Without -Pn, Nmap may report a live but ICMP-filtered host as 'down' and skip it entirely.",
+    "tags": [
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-015",
+    "category": "nmap",
+    "title": "Default script scan",
+    "code": "nmap -sC target",
+    "description": "Run Nmap's default set of non-intrusive NSE scripts against detected services.",
+    "example": "nmap -sC -sV 10.0.0.5",
+    "output": "| http-title: Welcome",
+    "notes": "-sC is shorthand for --script=default.",
+    "tags": [
+      "scripting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-016",
+    "category": "nmap",
+    "title": "Run a specific NSE script",
+    "code": "nmap --script=script-name target",
+    "description": "Run a named Nmap Scripting Engine script (or category/wildcard) against the target.",
+    "example": "nmap --script=http-headers -p 80 10.0.0.5",
+    "output": "",
+    "notes": "--script=vuln runs the whole vulnerability-detection script category \u2014 expect a long runtime.",
+    "tags": [
+      "scripting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-017",
+    "category": "nmap",
+    "title": "Vulnerability scan category",
+    "code": "nmap --script vuln target",
+    "description": "Run the 'vuln' category of NSE scripts, which check for numerous known CVEs/misconfigurations.",
+    "example": "nmap --script vuln -p 443 10.0.0.5",
+    "output": "",
+    "notes": "Can be intrusive; some scripts in this category may crash fragile services \u2014 test in a lab first.",
+    "tags": [
+      "scripting",
+      "vulnerability"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-018",
+    "category": "nmap",
+    "title": "Timing template",
+    "code": "nmap -T4 target",
+    "description": "Set a timing template from 0 (paranoid) to 5 (insane) controlling scan speed vs stealth.",
+    "example": "nmap -T4 10.0.0.0/24",
+    "output": "",
+    "notes": "T3 is the default; T4 is commonly used on reliable local networks for a good speed/accuracy balance.",
+    "tags": [
+      "performance"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-019",
+    "category": "nmap",
+    "title": "Output to file (normal)",
+    "code": "nmap -oN out.txt target",
+    "description": "Save scan results in normal human-readable format to a file.",
+    "example": "nmap -oN scan.txt 10.0.0.5",
+    "output": "",
+    "notes": "-oA basename writes normal, XML and grepable formats simultaneously in one run.",
+    "tags": [
+      "output"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-020",
+    "category": "nmap",
+    "title": "Output to XML",
+    "code": "nmap -oX out.xml target",
+    "description": "Save scan results in XML, suitable for parsing by other tools (e.g. to feed into a report generator).",
+    "example": "nmap -oX scan.xml 10.0.0.5",
+    "output": "",
+    "notes": "xsltproc can convert Nmap's XML output into an HTML report using the bundled stylesheet.",
+    "tags": [
+      "output"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-021",
+    "category": "nmap",
+    "title": "Grepable output",
+    "code": "nmap -oG out.gnmap target",
+    "description": "Save results in a legacy line-per-host format that's easy to grep/awk.",
+    "example": "nmap -oG scan.gnmap 10.0.0.0/24",
+    "output": "",
+    "notes": "Officially deprecated by the Nmap project but still widely used in quick shell pipelines.",
+    "tags": [
+      "output"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-022",
+    "category": "nmap",
+    "title": "Firewall/IDS evasion \u2014 fragmentation",
+    "code": "nmap -f target",
+    "description": "Split probe packets into smaller fragments to slip past some simple packet-filtering firewalls/IDS.",
+    "example": "nmap -f 10.0.0.5",
+    "output": "",
+    "notes": "-ff fragments even more aggressively (8-byte fragments); modern stateful firewalls reassemble anyway.",
+    "tags": [
+      "evasion"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-023",
+    "category": "nmap",
+    "title": "Decoy scan",
+    "code": "nmap -D decoy1,decoy2,ME target",
+    "description": "Make the scan appear to originate from multiple spoofed decoy IPs alongside the real one.",
+    "example": "nmap -D 10.0.0.9,10.0.0.10,ME 10.0.0.5",
+    "output": "",
+    "notes": "'ME' controls the position of your real IP among the decoys in the sequence.",
+    "tags": [
+      "evasion"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-024",
+    "category": "nmap",
+    "title": "Spoof source port",
+    "code": "nmap -g 53 target",
+    "description": "Send probes from a specific source port, e.g. 53, to slip past port-based firewall rules.",
+    "example": "nmap -g 53 -p 80 10.0.0.5",
+    "output": "",
+    "notes": "Some older/misconfigured firewalls implicitly trust traffic sourced from port 53 (DNS).",
+    "tags": [
+      "evasion"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-025",
+    "category": "nmap",
+    "title": "Set min packet rate",
+    "code": "nmap --min-rate 1000 target",
+    "description": "Force Nmap to send at least N packets per second, dramatically speeding up large scans.",
+    "example": "nmap --min-rate 1000 -p- 10.0.0.0/24",
+    "output": "",
+    "notes": "Too aggressive a rate can trigger IDS alerts or overwhelm fragile network gear \u2014 tune for the environment.",
+    "tags": [
+      "performance"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "nmap-026",
+    "category": "nmap",
+    "title": "Exclude hosts",
+    "code": "nmap --exclude ip target-range",
+    "description": "Exclude specific hosts or ranges from a broader scan.",
+    "example": "nmap --exclude 10.0.0.1,10.0.0.254 10.0.0.0/24",
+    "output": "",
+    "notes": "Useful for skipping known-fragile devices (printers, IoT) during a subnet-wide scan.",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-027",
+    "category": "nmap",
+    "title": "Read targets from file",
+    "code": "nmap -iL targets.txt",
+    "description": "Read the list of scan targets from a text file, one host/range per line.",
+    "example": "nmap -iL scope.txt -oA results",
+    "output": "",
+    "notes": "Combine with --excludefile to subtract an out-of-scope list from the same input.",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-028",
+    "category": "nmap",
+    "title": "Traceroute",
+    "code": "nmap --traceroute target",
+    "description": "Trace the network path to the target as part of the scan.",
+    "example": "nmap --traceroute -p 80 10.0.0.5",
+    "output": "TRACEROUTE\n1  10.0.0.1  0.42 ms",
+    "notes": "Included automatically by -A; standalone useful when you don't need the rest of an aggressive scan.",
+    "tags": [
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-029",
+    "category": "nmap",
+    "title": "Banner grabbing script",
+    "code": "nmap --script banner target",
+    "description": "Grab service banners on open ports to help identify software/version.",
+    "example": "nmap --script banner -p 21,22,25 10.0.0.5",
+    "output": "21/tcp open ftp | banner: 220 ProFTPD 1.3.7 Server",
+    "notes": "Banners are self-reported by the service and can be altered/faked, so verify independently.",
+    "tags": [
+      "recon",
+      "scripting"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-030",
+    "category": "nmap",
+    "title": "SMB enumeration script",
+    "code": "nmap --script smb-enum-shares target",
+    "description": "Enumerate SMB shares exposed by a Windows/Samba host.",
+    "example": "nmap --script smb-enum-shares -p 445 10.0.0.5",
+    "output": "",
+    "notes": "Pair with smb-os-discovery and smb-enum-users for a fuller Windows host profile.",
+    "tags": [
+      "scripting",
+      "active-directory"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "nmap-031",
+    "category": "nmap",
+    "title": "HTTP title grab",
+    "code": "nmap --script http-title target",
+    "description": "Fetch and display the <title> of the web page served on detected HTTP ports.",
+    "example": "nmap --script http-title -p 80,8080 10.0.0.0/24",
+    "output": "80/tcp open http | http-title: Internal Dashboard",
+    "notes": "A fast way to fingerprint what's running across a whole subnet of web servers.",
+    "tags": [
+      "scripting",
+      "web"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "nmap-032",
+    "category": "nmap",
+    "title": "Compare scan results",
+    "code": "ndiff scan1.xml scan2.xml",
+    "description": "Compare two Nmap XML scan results to highlight what changed between them (new/closed ports, new hosts).",
+    "example": "ndiff before.xml after.xml",
+    "output": "-80/tcp open http\n+8080/tcp open http-proxy",
+    "notes": "Bundled with Nmap; excellent for periodic attack-surface drift monitoring.",
+    "tags": [
+      "output",
+      "monitoring"
+    ],
+    "difficulty": "Medium"
+  }
+]

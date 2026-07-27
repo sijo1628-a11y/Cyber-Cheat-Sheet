@@ -1,0 +1,614 @@
+[
+  {
+    "id": "windows-001",
+    "category": "windows",
+    "title": "ipconfig",
+    "code": "ipconfig /all",
+    "description": "Display full TCP/IP configuration for all network adapters.",
+    "example": "ipconfig /all",
+    "output": "Ethernet adapter Ethernet0:\n   IPv4 Address. . . . . . . . . . . : 10.0.0.15\n   Default Gateway . . . . . . . . . : 10.0.0.1",
+    "notes": "'ipconfig /flushdns' clears the local DNS resolver cache \u2014 useful after a suspected DNS-poisoning incident.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-002",
+    "category": "windows",
+    "title": "tasklist",
+    "code": "tasklist",
+    "description": "List all currently running processes, similar to Task Manager's process tab.",
+    "example": "tasklist /v | findstr chrome",
+    "output": "chrome.exe 4021 Console 1 154,220 K Running",
+    "notes": "'/svc' shows which services run inside each host process (useful for svchost.exe triage).",
+    "tags": [
+      "system",
+      "process-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-003",
+    "category": "windows",
+    "title": "taskkill",
+    "code": "taskkill /PID 4021 /F",
+    "description": "Terminate a process by PID or image name. /F forces termination.",
+    "example": "taskkill /IM notepad.exe /F",
+    "output": "SUCCESS: The process \"notepad.exe\" has been terminated.",
+    "notes": "/T also kills the entire child-process tree.",
+    "tags": [
+      "system",
+      "process-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-004",
+    "category": "windows",
+    "title": "netstat",
+    "code": "netstat -ano",
+    "description": "Show active connections and listening ports, with -o showing the owning PID.",
+    "example": "netstat -ano | findstr :443",
+    "output": "TCP 10.0.0.15:51022 93.184.216.34:443 ESTABLISHED 4021",
+    "notes": "Cross-reference the PID column with 'tasklist' to identify the responsible process.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-005",
+    "category": "windows",
+    "title": "shutdown",
+    "code": "shutdown /r /t 0",
+    "description": "Shut down, restart, log off, or hibernate the local or a remote computer.",
+    "example": "shutdown /r /m \\\\HOST01 /t 60",
+    "output": "",
+    "notes": "/a aborts a pending shutdown before the timer expires.",
+    "tags": [
+      "system"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-006",
+    "category": "windows",
+    "title": "ping",
+    "code": "ping -n 4 host",
+    "description": "Send ICMP echo requests to test reachability and latency.",
+    "example": "ping -n 4 8.8.8.8",
+    "output": "Reply from 8.8.8.8: bytes=32 time=14ms TTL=115",
+    "notes": "-t pings continuously until stopped with Ctrl+C.",
+    "tags": [
+      "networking"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-007",
+    "category": "windows",
+    "title": "tracert",
+    "code": "tracert host",
+    "description": "Trace the route packets take to a destination host (Windows equivalent of traceroute).",
+    "example": "tracert -d 8.8.8.8",
+    "output": "1 <1 ms <1 ms <1 ms 10.0.0.1",
+    "notes": "-d skips reverse DNS lookups, speeding up the trace considerably.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-008",
+    "category": "windows",
+    "title": "nslookup",
+    "code": "nslookup domain",
+    "description": "Query DNS servers interactively or in batch mode.",
+    "example": "nslookup -type=MX example.com",
+    "output": "example.com MX preference = 10, mail exchanger = mail.example.com",
+    "notes": "Run 'nslookup' with no arguments to enter interactive mode against the default DNS server.",
+    "tags": [
+      "networking",
+      "dns"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-009",
+    "category": "windows",
+    "title": "systeminfo",
+    "code": "systeminfo",
+    "description": "Display detailed OS configuration, including patch level, hotfixes and boot time.",
+    "example": "systeminfo | findstr /C:\"OS Version\"",
+    "output": "OS Version: 10.0.19045 N/A Build 19045",
+    "notes": "Cross-check the hotfix list against known CVEs during a patch-compliance review.",
+    "tags": [
+      "system",
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-010",
+    "category": "windows",
+    "title": "hostname",
+    "code": "hostname",
+    "description": "Print the computer's network name.",
+    "example": "hostname",
+    "output": "WIN-SOC01",
+    "notes": "Combine with 'whoami' when documenting evidence during an IR engagement.",
+    "tags": [
+      "system",
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-011",
+    "category": "windows",
+    "title": "whoami",
+    "code": "whoami /all",
+    "description": "Display the current user, and with /all their SID, groups, and privileges.",
+    "example": "whoami /priv",
+    "output": "PRIVILEGES INFORMATION\nSeDebugPrivilege  Debug programs  Disabled",
+    "notes": "SeDebugPrivilege and SeImpersonatePrivilege being enabled are common privilege-escalation footholds.",
+    "tags": [
+      "system",
+      "authentication",
+      "privesc"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-012",
+    "category": "windows",
+    "title": "wmic",
+    "code": "wmic process list brief",
+    "description": "Query WMI from the command line for system, process, and hardware information (deprecated since Win10 21H1 in favor of PowerShell).",
+    "example": "wmic process where name=\"notepad.exe\" get processid",
+    "output": "ProcessId\n4021",
+    "notes": "Deprecated but still present on many hosts \u2014 attackers use it for living-off-the-land recon.",
+    "tags": [
+      "system",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-013",
+    "category": "windows",
+    "title": "gpupdate",
+    "code": "gpupdate /force",
+    "description": "Refresh local and Active Directory Group Policy settings immediately.",
+    "example": "gpupdate /force",
+    "output": "Computer Policy update has completed successfully.",
+    "notes": "'gpresult /r' shows which policies are actually applied to the current session.",
+    "tags": [
+      "active-directory",
+      "system"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-014",
+    "category": "windows",
+    "title": "sfc",
+    "code": "sfc /scannow",
+    "description": "Scan and repair protected system files against the component store.",
+    "example": "sfc /scannow",
+    "output": "Windows Resource Protection found corrupt files and successfully repaired them.",
+    "notes": "Run 'DISM /Online /Cleanup-Image /RestoreHealth' first if sfc itself reports it cannot repair files.",
+    "tags": [
+      "system",
+      "integrity"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-015",
+    "category": "windows",
+    "title": "dism",
+    "code": "dism /online /cleanup-image /restorehealth",
+    "description": "Servicing tool for mounting, repairing and configuring Windows images.",
+    "example": "DISM /Online /Get-Packages",
+    "output": "",
+    "notes": "Often run before sfc /scannow when the component store itself is damaged.",
+    "tags": [
+      "system"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-016",
+    "category": "windows",
+    "title": "net user",
+    "code": "net user user pass /add",
+    "description": "Manage local user accounts \u2014 create, modify, delete, view.",
+    "example": "net user analyst /active:no",
+    "output": "The command completed successfully.",
+    "notes": "Legacy tool; PowerShell's Get-LocalUser/New-LocalUser are the modern equivalent.",
+    "tags": [
+      "system",
+      "user-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-017",
+    "category": "windows",
+    "title": "net localgroup",
+    "code": "net localgroup admins",
+    "description": "View or modify local group membership.",
+    "example": "net localgroup Administrators analyst /add",
+    "output": "The command completed successfully.",
+    "notes": "Unexpected members of the local Administrators group are a common IR finding.",
+    "tags": [
+      "system",
+      "user-management",
+      "privesc"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-018",
+    "category": "windows",
+    "title": "net share",
+    "code": "net share",
+    "description": "List, create or delete SMB network shares.",
+    "example": "net share",
+    "output": "Share name  Resource   Remark\nC$          C:\\        Default share",
+    "notes": "Default administrative shares (C$, ADMIN$) are frequently abused for lateral movement.",
+    "tags": [
+      "networking",
+      "filesystem"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-019",
+    "category": "windows",
+    "title": "diskpart",
+    "code": "diskpart",
+    "description": "Interactive command-line disk partitioning utility.",
+    "example": "list disk",
+    "output": "Disk ### Status Size\nDisk 0 Online 238 GB",
+    "notes": "Type 'list disk' then 'select disk N' before any destructive operation \u2014 double-check the disk number.",
+    "tags": [
+      "system",
+      "storage"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-020",
+    "category": "windows",
+    "title": "chkdsk",
+    "code": "chkdsk C: /f",
+    "description": "Check a disk for filesystem errors and, with /f, fix them.",
+    "example": "chkdsk C: /f /r",
+    "output": "",
+    "notes": "/r additionally locates bad sectors and recovers readable information; requires a reboot on the system volume.",
+    "tags": [
+      "system",
+      "storage"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-021",
+    "category": "windows",
+    "title": "schtasks",
+    "code": "schtasks /query",
+    "description": "View, create or delete scheduled tasks from the command line.",
+    "example": "schtasks /create /tn \"Backup\" /tr backup.bat /sc daily /st 02:00",
+    "output": "SUCCESS: The scheduled task \"Backup\" has successfully been created.",
+    "notes": "Attacker-created scheduled tasks are a common persistence mechanism \u2014 audit /query /fo LIST /v regularly.",
+    "tags": [
+      "system",
+      "persistence"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-022",
+    "category": "windows",
+    "title": "dir",
+    "code": "dir /a /s",
+    "description": "List directory contents. /a shows hidden files, /s recurses subdirectories.",
+    "example": "dir /a /s C:\\Users\\Public",
+    "output": "",
+    "notes": "'/o:d' sorts by date, handy for finding recently dropped files during triage.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-023",
+    "category": "windows",
+    "title": "copy / xcopy / robocopy",
+    "code": "robocopy src dst /E",
+    "description": "Copy files/folders; robocopy is the modern, resumable, multithreaded option.",
+    "example": "robocopy C:\\Data D:\\Backup /MIR /LOG:copy.log",
+    "output": "",
+    "notes": "/MIR mirrors the source, deleting files at the destination that no longer exist at the source \u2014 use with care.",
+    "tags": [
+      "filesystem"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-024",
+    "category": "windows",
+    "title": "del / erase",
+    "code": "del /f /q file",
+    "description": "Delete one or more files. /f forces deletion of read-only files, /q suppresses prompts.",
+    "example": "del /f /q C:\\Temp\\*.tmp",
+    "output": "",
+    "notes": "Deleted files bypass the Recycle Bin when removed from the command line.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-025",
+    "category": "windows",
+    "title": "attrib",
+    "code": "attrib +h +s file",
+    "description": "View or change file attributes: hidden, system, read-only, archive.",
+    "example": "attrib -h -s C:\\autoexec.bat",
+    "output": "",
+    "notes": "Malware commonly sets +h +s on dropped files to hide them from a casual Explorer view.",
+    "tags": [
+      "filesystem",
+      "forensics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-026",
+    "category": "windows",
+    "title": "icacls",
+    "code": "icacls file /grant user:F",
+    "description": "View or modify NTFS permissions (ACLs) on files and folders.",
+    "example": "icacls C:\\Cases /grant analyst:(OI)(CI)RX",
+    "output": "processed file: C:\\Cases",
+    "notes": "icacls C:\\path /reset restores inherited permissions, useful for undoing a misconfiguration.",
+    "tags": [
+      "filesystem",
+      "permissions"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-027",
+    "category": "windows",
+    "title": "reg",
+    "code": "reg query HKLM\\...",
+    "description": "Read or modify the Windows Registry from the command line.",
+    "example": "reg query \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\"",
+    "output": "Zoom REG_SZ C:\\Users\\a\\AppData\\...\\Zoom.exe",
+    "notes": "The Run/RunOnce keys are among the most common persistence locations to check first.",
+    "tags": [
+      "registry",
+      "persistence",
+      "forensics"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-028",
+    "category": "windows",
+    "title": "sc",
+    "code": "sc query svc",
+    "description": "Query or configure Windows services from the command line (Service Controller).",
+    "example": "sc query state= all | findstr RUNNING",
+    "output": "",
+    "notes": "'sc qc svcname' shows the service's binary path \u2014 check for unexpected paths pointing outside System32.",
+    "tags": [
+      "system",
+      "services",
+      "forensics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-029",
+    "category": "windows",
+    "title": "netsh",
+    "code": "netsh advfirewall show",
+    "description": "Configure networking components: firewall, interfaces, WLAN profiles.",
+    "example": "netsh advfirewall firewall add rule name=\"BlockTelnet\" dir=in action=block protocol=TCP localport=23",
+    "output": "Ok.",
+    "notes": "'netsh wlan show profiles key=clear' reveals saved Wi-Fi passwords in cleartext.",
+    "tags": [
+      "networking",
+      "firewall"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-030",
+    "category": "windows",
+    "title": "route",
+    "code": "route print",
+    "description": "Display or modify the local IP routing table.",
+    "example": "route add 10.10.0.0 mask 255.255.0.0 10.0.0.254",
+    "output": "OK!",
+    "notes": "Unexplained static routes can indicate a compromised host redirecting traffic.",
+    "tags": [
+      "networking"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-031",
+    "category": "windows",
+    "title": "arp",
+    "code": "arp -a",
+    "description": "Display or modify the local ARP cache mapping IPs to MAC addresses.",
+    "example": "arp -a",
+    "output": "Interface: 10.0.0.15\n  10.0.0.1  00-1a-2b-3c-4d-5e dynamic",
+    "notes": "Sudden ARP-cache changes to the gateway entry can indicate ARP spoofing/MITM.",
+    "tags": [
+      "networking",
+      "forensics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-032",
+    "category": "windows",
+    "title": "type",
+    "code": "type file.txt",
+    "description": "Display the contents of a text file (Windows equivalent of cat).",
+    "example": "type C:\\Windows\\System32\\drivers\\etc\\hosts",
+    "output": "127.0.0.1 localhost",
+    "notes": "Unexpected entries in the hosts file are a classic sign of DNS-hijacking malware.",
+    "tags": [
+      "filesystem",
+      "forensics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "windows-033",
+    "category": "windows",
+    "title": "findstr",
+    "code": "findstr /s /i pattern *.log",
+    "description": "Search for text patterns in files, similar to grep. /s recurses, /i ignores case.",
+    "example": "findstr /s /i \"password\" *.txt",
+    "output": "config.txt:5:db_password=changeme123",
+    "notes": "/n shows line numbers; /r enables basic regular expressions.",
+    "tags": [
+      "text",
+      "log-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-034",
+    "category": "windows",
+    "title": "cipher",
+    "code": "cipher /w:C:\\",
+    "description": "Manage EFS encryption; the /w switch securely wipes free space on a volume.",
+    "example": "cipher /w:C:\\Temp",
+    "output": "",
+    "notes": "Useful for confirming deleted-file remnants have been overwritten during sanitization.",
+    "tags": [
+      "filesystem",
+      "cryptography"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-035",
+    "category": "windows",
+    "title": "certutil",
+    "code": "certutil -hashfile file SHA256",
+    "description": "Manage certificates, and (unofficially) hash files or decode base64 \u2014 no dedicated tool needed.",
+    "example": "certutil -hashfile sample.exe SHA256",
+    "output": "SHA256 hash of sample.exe:\n3a7bd3e2360a3d...",
+    "notes": "Attackers abuse certutil -urlcache/-decode as a living-off-the-land downloader \u2014 always review its use.",
+    "tags": [
+      "cryptography",
+      "forensics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-036",
+    "category": "windows",
+    "title": "robocopy",
+    "code": "robocopy src dst /MIR /LOG:x",
+    "description": "See 'copy / xcopy / robocopy' above \u2014 listed separately as it is frequently searched on its own.",
+    "example": "robocopy C:\\ D:\\Backup /E /XA:H /R:1",
+    "output": "",
+    "notes": "/XA:H excludes hidden files; /R:1 limits retry attempts on locked files to 1.",
+    "tags": [
+      "filesystem"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-037",
+    "category": "windows",
+    "title": "wevtutil",
+    "code": "wevtutil qe Security /c:5 /rd:true /f:text",
+    "description": "Query and manage Windows Event Logs directly from the command line.",
+    "example": "wevtutil qe Security /q:\"*[System[(EventID=4625)]]\" /c:10 /f:text",
+    "output": "",
+    "notes": "Event ID 4625 = failed logon; 4624 = successful logon \u2014 foundational for brute-force hunting.",
+    "tags": [
+      "logging",
+      "forensics"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-038",
+    "category": "windows",
+    "title": "takeown",
+    "code": "takeown /f file",
+    "description": "Take ownership of a file or folder that the current user lacks permission to access.",
+    "example": "takeown /f C:\\Windows\\System32\\locked.dll",
+    "output": "SUCCESS: The file (or folder) now owned by user.",
+    "notes": "Often paired with icacls to grant full control after regaining ownership.",
+    "tags": [
+      "filesystem",
+      "permissions"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-039",
+    "category": "windows",
+    "title": "driverquery",
+    "code": "driverquery /v",
+    "description": "List all installed device drivers and their properties.",
+    "example": "driverquery /v | findstr /i unsigned",
+    "output": "",
+    "notes": "Unsigned kernel drivers are a red flag worth investigating \u2014 a common rootkit vector.",
+    "tags": [
+      "forensics",
+      "system"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "windows-040",
+    "category": "windows",
+    "title": "msconfig / bcdedit",
+    "code": "bcdedit /enum",
+    "description": "View or modify Boot Configuration Data (boot manager entries, safe-mode options).",
+    "example": "bcdedit /enum",
+    "output": "identifier              {current}\ndevice                  partition=C:",
+    "notes": "bcdedit is command-line only; msconfig provides a GUI over similar boot settings.",
+    "tags": [
+      "system"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "windows-041",
+    "category": "windows",
+    "title": "fsutil",
+    "code": "fsutil fsinfo drives",
+    "description": "Perform low-level filesystem tasks: query volume info, manage NTFS features, reparse points.",
+    "example": "fsutil fsinfo volumeinfo C:",
+    "output": "Volume Name : OS\nFile System Name : NTFS",
+    "notes": "'fsutil usn readjournal' can help reconstruct recently deleted/renamed files during an investigation.",
+    "tags": [
+      "filesystem",
+      "forensics"
+    ],
+    "difficulty": "Hard"
+  }
+]

@@ -1,0 +1,1046 @@
+[
+  {
+    "id": "linux-001",
+    "category": "linux",
+    "title": "pwd",
+    "code": "pwd",
+    "description": "Print the full path of the current working directory.",
+    "example": "pwd",
+    "output": "/home/analyst/case001",
+    "notes": "Useful as a sanity check inside scripts before running relative-path commands.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-002",
+    "category": "linux",
+    "title": "ls -la",
+    "code": "ls -la",
+    "description": "List all files in a directory, including hidden dotfiles, with permissions, owner, size and mtime.",
+    "example": "ls -la /var/log",
+    "output": "drwxr-xr-x 2 root root 4096 Jul 20 09:11 .\n-rw-r----- 1 syslog adm 20481 Jul 26 08:02 auth.log",
+    "notes": "The leading dot entries (. and ..) are the current and parent directory.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-003",
+    "category": "linux",
+    "title": "cd",
+    "code": "cd /path",
+    "description": "Change the current shell directory.",
+    "example": "cd /var/log",
+    "output": "",
+    "notes": "'cd -' returns to the previous directory; 'cd' alone goes to $HOME.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-004",
+    "category": "linux",
+    "title": "mkdir",
+    "code": "mkdir -p a/b/c",
+    "description": "Create a directory, with -p creating parent directories as needed.",
+    "example": "mkdir -p /tmp/case/evidence",
+    "output": "",
+    "notes": "Combine with -m to set permissions at creation time, e.g. mkdir -m 700.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-005",
+    "category": "linux",
+    "title": "rm",
+    "code": "rm -rf dir/",
+    "description": "Remove files or directories. -r is recursive, -f suppresses prompts.",
+    "example": "rm -rf /tmp/scratch",
+    "output": "",
+    "notes": "Irreversible \u2014 there is no Recycle Bin. Never run against a wildcard you have not previewed with ls first.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-006",
+    "category": "linux",
+    "title": "mv",
+    "code": "mv src dst",
+    "description": "Move or rename a file or directory.",
+    "example": "mv report.txt report_final.txt",
+    "output": "",
+    "notes": "Overwrites the destination silently unless -i (interactive) is used.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-007",
+    "category": "linux",
+    "title": "cp",
+    "code": "cp -r src dst",
+    "description": "Copy files or directories. -r copies directories recursively, -p preserves attributes.",
+    "example": "cp -rp /etc/nginx /tmp/nginx_backup",
+    "output": "",
+    "notes": "Use rsync instead of cp for large trees or when resuming interrupted copies.",
+    "tags": [
+      "filesystem",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-008",
+    "category": "linux",
+    "title": "chmod",
+    "code": "chmod 750 file",
+    "description": "Change file permission bits, either numerically (750) or symbolically (u+x).",
+    "example": "chmod 700 id_rsa",
+    "output": "",
+    "notes": "Numeric mode: read=4, write=2, execute=1 summed per owner/group/other.",
+    "tags": [
+      "filesystem",
+      "permissions"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-009",
+    "category": "linux",
+    "title": "chown",
+    "code": "chown user:group file",
+    "description": "Change the owning user and/or group of a file.",
+    "example": "chown -R www-data:www-data /var/www/html",
+    "output": "",
+    "notes": "Requires root or sudo unless changing your own files to a group you belong to.",
+    "tags": [
+      "filesystem",
+      "permissions"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-010",
+    "category": "linux",
+    "title": "find",
+    "code": "find / -name '*.log'",
+    "description": "Search a directory tree for files matching criteria (name, type, size, time, permissions).",
+    "example": "find / -perm -4000 -type f 2>/dev/null",
+    "output": "/usr/bin/sudo\n/usr/bin/passwd",
+    "notes": "'find / -perm -4000' is a classic first step for hunting SUID binaries during privilege-escalation review.",
+    "tags": [
+      "filesystem",
+      "forensics",
+      "privesc"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-011",
+    "category": "linux",
+    "title": "grep",
+    "code": "grep -rn 'pattern' dir/",
+    "description": "Search file contents for a pattern. -r recurses, -n shows line numbers, -i ignores case.",
+    "example": "grep -rn 'Failed password' /var/log/auth.log",
+    "output": "auth.log:412:Jul 26 03:14:02 sshd[901]: Failed password for root",
+    "notes": "-E enables extended regex; -v inverts the match; -c counts matching lines.",
+    "tags": [
+      "text",
+      "log-analysis"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-012",
+    "category": "linux",
+    "title": "awk",
+    "code": "awk '{print $1}' file",
+    "description": "Pattern-scanning and text-processing language, commonly used to extract columns.",
+    "example": "awk '{print $1,$9}' access.log | sort | uniq -c | sort -rn",
+    "output": "45 203.0.113.9 200",
+    "notes": "$0 is the whole line, $NF is the last field; -F sets the field separator.",
+    "tags": [
+      "text",
+      "log-analysis"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-013",
+    "category": "linux",
+    "title": "sed",
+    "code": "sed 's/foo/bar/g' file",
+    "description": "Stream editor for filtering and transforming text, most often used for find/replace.",
+    "example": "sed -n '10,20p' access.log",
+    "output": "",
+    "notes": "-i edits files in place; always test without -i first on production logs.",
+    "tags": [
+      "text"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-014",
+    "category": "linux",
+    "title": "tar",
+    "code": "tar -czvf out.tar.gz dir/",
+    "description": "Archive files, optionally with gzip (-z) or bzip2 (-j) compression.",
+    "example": "tar -xzvf backup.tar.gz -C /restore",
+    "output": "",
+    "notes": "c=create, x=extract, t=list contents, v=verbose, f=filename (always last flag before the path).",
+    "tags": [
+      "filesystem",
+      "archiving"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-015",
+    "category": "linux",
+    "title": "zip / unzip",
+    "code": "zip -r out.zip dir/",
+    "description": "Create or extract .zip archives.",
+    "example": "unzip -l suspicious.zip",
+    "output": "Archive:  suspicious.zip\n  Length      Name\n  1024        payload.exe",
+    "notes": "unzip -l lists contents without extracting \u2014 use this first on unknown archives.",
+    "tags": [
+      "filesystem",
+      "archiving"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-016",
+    "category": "linux",
+    "title": "curl",
+    "code": "curl -sI https://host",
+    "description": "Transfer data to/from a URL; -I fetches headers only, -o saves output, -s is silent.",
+    "example": "curl -sI https://example.com | grep -i server",
+    "output": "Server: nginx/1.24.0",
+    "notes": "-k skips TLS verification (lab use only); -H adds a custom header.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-017",
+    "category": "linux",
+    "title": "wget",
+    "code": "wget https://host/file",
+    "description": "Non-interactive downloader for files over HTTP/HTTPS/FTP.",
+    "example": "wget -q --spider https://example.com",
+    "output": "",
+    "notes": "--spider checks that a URL exists without downloading it.",
+    "tags": [
+      "networking"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-018",
+    "category": "linux",
+    "title": "ssh",
+    "code": "ssh user@host",
+    "description": "Open a secure shell session to a remote host.",
+    "example": "ssh -i id_rsa -p 2222 analyst@10.0.0.5",
+    "output": "",
+    "notes": "-J chains through a jump host; ~/.ssh/config lets you alias hosts.",
+    "tags": [
+      "networking",
+      "remote-access"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-019",
+    "category": "linux",
+    "title": "scp",
+    "code": "scp file user@host:path",
+    "description": "Securely copy files between hosts over SSH.",
+    "example": "scp evidence.pcap analyst@10.0.0.5:/cases/",
+    "output": "",
+    "notes": "-r for directories; scp is deprecated in favor of rsync/sftp on newer OpenSSH but still widely used.",
+    "tags": [
+      "networking",
+      "filesystem"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-020",
+    "category": "linux",
+    "title": "rsync",
+    "code": "rsync -avz src/ dst/",
+    "description": "Efficiently synchronize files/directories, locally or over SSH, transferring only diffs.",
+    "example": "rsync -avz -e ssh /data/ analyst@10.0.0.5:/backup/",
+    "output": "",
+    "notes": "--delete mirrors deletions on the destination; -n does a dry run.",
+    "tags": [
+      "filesystem",
+      "networking"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-021",
+    "category": "linux",
+    "title": "systemctl",
+    "code": "systemctl status svc",
+    "description": "Control and query systemd services (start, stop, restart, enable, status).",
+    "example": "systemctl status sshd",
+    "output": "\u25cf ssh.service - OpenBSD Secure Shell server\n   Active: active (running)",
+    "notes": "'systemctl list-units --failed' quickly surfaces broken services.",
+    "tags": [
+      "system",
+      "services"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-022",
+    "category": "linux",
+    "title": "journalctl",
+    "code": "journalctl -u svc",
+    "description": "Query the systemd journal (logs).",
+    "example": "journalctl -u sshd --since '1 hour ago'",
+    "output": "",
+    "notes": "-f follows live like tail -f; -p err filters by priority.",
+    "tags": [
+      "logging",
+      "log-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-023",
+    "category": "linux",
+    "title": "iptables",
+    "code": "iptables -L -n",
+    "description": "List, add or remove packet filtering / NAT rules in the legacy netfilter table.",
+    "example": "iptables -A INPUT -p tcp --dport 22 -s 10.0.0.0/24 -j ACCEPT",
+    "output": "",
+    "notes": "Rules are evaluated top-down; put specific ACCEPT/DROP rules before broad ones.",
+    "tags": [
+      "networking",
+      "firewall"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-024",
+    "category": "linux",
+    "title": "ufw",
+    "code": "ufw status verbose",
+    "description": "Uncomplicated Firewall \u2014 a friendlier front end for iptables on Debian/Ubuntu.",
+    "example": "ufw allow from 10.0.0.0/24 to any port 22",
+    "output": "Rule added",
+    "notes": "'ufw logging on' enables connection logging to syslog.",
+    "tags": [
+      "networking",
+      "firewall"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-025",
+    "category": "linux",
+    "title": "netstat",
+    "code": "netstat -tulnp",
+    "description": "Show network connections, listening ports and the owning process (legacy, use ss instead).",
+    "example": "netstat -tulnp | grep LISTEN",
+    "output": "tcp 0 0 0.0.0.0:22 0.0.0.0:* LISTEN 812/sshd",
+    "notes": "Deprecated on modern distros in favor of the iproute2 'ss' command.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-026",
+    "category": "linux",
+    "title": "ss",
+    "code": "ss -tulnp",
+    "description": "Modern replacement for netstat; dumps socket statistics.",
+    "example": "ss -antp state established",
+    "output": "",
+    "notes": "-s prints summary statistics; -o shows timer info for TIME-WAIT sockets.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-027",
+    "category": "linux",
+    "title": "dig",
+    "code": "dig domain",
+    "description": "Query DNS servers for records (A, MX, TXT, etc).",
+    "example": "dig +short example.com A",
+    "output": "93.184.216.34",
+    "notes": "dig -x reverse-resolves an IP; dig @8.8.8.8 queries a specific resolver.",
+    "tags": [
+      "networking",
+      "dns"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-028",
+    "category": "linux",
+    "title": "host",
+    "code": "host domain",
+    "description": "Simple DNS lookup utility.",
+    "example": "host -t MX example.com",
+    "output": "example.com mail is handled by 10 mail.example.com.",
+    "notes": "Lighter weight than dig; good for quick scripted lookups.",
+    "tags": [
+      "networking",
+      "dns"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-029",
+    "category": "linux",
+    "title": "nslookup",
+    "code": "nslookup domain",
+    "description": "Interactive/batch tool for querying DNS servers.",
+    "example": "nslookup -type=TXT example.com",
+    "output": "",
+    "notes": "Considered legacy compared to dig, but still present on nearly every system.",
+    "tags": [
+      "networking",
+      "dns"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-030",
+    "category": "linux",
+    "title": "traceroute",
+    "code": "traceroute host",
+    "description": "Show the network path (hop by hop) packets take to a destination.",
+    "example": "traceroute -n 8.8.8.8",
+    "output": "1  10.0.0.1  0.421 ms\n2  100.64.0.1  4.112 ms",
+    "notes": "Use tracepath as an unprivileged alternative; mtr combines ping+traceroute live.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-031",
+    "category": "linux",
+    "title": "tcpdump",
+    "code": "tcpdump -i eth0",
+    "description": "Capture and display packets on the wire from the command line.",
+    "example": "tcpdump -i eth0 -w capture.pcap port 443",
+    "output": "",
+    "notes": "-nn avoids DNS/port name resolution for speed; open the .pcap later in Wireshark.",
+    "tags": [
+      "networking",
+      "packet-capture"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-032",
+    "category": "linux",
+    "title": "crontab",
+    "code": "crontab -e",
+    "description": "Edit the current user's scheduled cron jobs.",
+    "example": "crontab -l",
+    "output": "0 2 * * * /usr/local/bin/backup.sh",
+    "notes": "Fields are: minute hour day-of-month month day-of-week command.",
+    "tags": [
+      "system",
+      "scheduling"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-033",
+    "category": "linux",
+    "title": "top",
+    "code": "top",
+    "description": "Live, updating view of running processes and system resource usage.",
+    "example": "top -o %CPU",
+    "output": "",
+    "notes": "Press 'k' to kill a PID from within top, 'q' to quit.",
+    "tags": [
+      "system",
+      "monitoring"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-034",
+    "category": "linux",
+    "title": "htop",
+    "code": "htop",
+    "description": "Interactive, color process viewer \u2014 a friendlier top.",
+    "example": "htop",
+    "output": "",
+    "notes": "Not installed by default on minimal images; apt install htop.",
+    "tags": [
+      "system",
+      "monitoring"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-035",
+    "category": "linux",
+    "title": "kill",
+    "code": "kill -9 PID",
+    "description": "Send a signal to a process, most commonly to terminate it.",
+    "example": "kill -9 4021",
+    "output": "",
+    "notes": "-9 (SIGKILL) is not catchable/ignorable; prefer -15 (SIGTERM) first for graceful shutdown.",
+    "tags": [
+      "system",
+      "process-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-036",
+    "category": "linux",
+    "title": "ps",
+    "code": "ps aux",
+    "description": "Snapshot of currently running processes.",
+    "example": "ps aux | grep nginx",
+    "output": "www-data 812 0.0 0.2 55344 8120 ? Ss 08:02 0:00 nginx: worker",
+    "notes": "'ps -ef --forest' shows the parent/child process tree.",
+    "tags": [
+      "system",
+      "process-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-037",
+    "category": "linux",
+    "title": "history",
+    "code": "history",
+    "description": "Show the shell command history for the current user.",
+    "example": "history | grep ssh",
+    "output": "412  ssh analyst@10.0.0.5",
+    "notes": "HISTFILE controls where this is stored (~/.bash_history by default) \u2014 a key forensic artifact.",
+    "tags": [
+      "forensics",
+      "shell"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-038",
+    "category": "linux",
+    "title": "df",
+    "code": "df -h",
+    "description": "Report filesystem disk space usage in human-readable form.",
+    "example": "df -h /",
+    "output": "Filesystem Size Used Avail Use% Mounted on\n/dev/sda1 40G 12G 26G 32% /",
+    "notes": "Watch for 100% usage \u2014 many services fail silently on a full disk.",
+    "tags": [
+      "system",
+      "storage"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-039",
+    "category": "linux",
+    "title": "du",
+    "code": "du -sh dir/",
+    "description": "Estimate disk usage of files/directories. -s summarizes, -h is human-readable.",
+    "example": "du -sh /var/log/* | sort -rh | head",
+    "output": "1.2G /var/log/journal",
+    "notes": "Great for quickly finding what's eating disk space.",
+    "tags": [
+      "system",
+      "storage"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-040",
+    "category": "linux",
+    "title": "mount",
+    "code": "mount /dev/sdb1 /mnt",
+    "description": "Attach a filesystem to the directory tree; run with no args to list current mounts.",
+    "example": "mount -o ro,loop evidence.img /mnt/case",
+    "output": "",
+    "notes": "-o ro,loop is the standard read-only, forensically-safe way to mount a disk image.",
+    "tags": [
+      "forensics",
+      "storage"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-041",
+    "category": "linux",
+    "title": "lsof",
+    "code": "lsof -i :443",
+    "description": "List open files, including network sockets held by processes.",
+    "example": "lsof -i -P -n | grep LISTEN",
+    "output": "",
+    "notes": "On Unix, 'everything is a file' \u2014 lsof also reveals which process is holding a deleted file open.",
+    "tags": [
+      "forensics",
+      "system"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-042",
+    "category": "linux",
+    "title": "last",
+    "code": "last -a",
+    "description": "Show a listing of last logged-in users from /var/log/wtmp.",
+    "example": "last -a | head",
+    "output": "analyst pts/0 10.0.0.7 Sat Jul 25 22:01 - 22:40",
+    "notes": "'lastb' shows failed login attempts from btmp; both are common brute-force indicators.",
+    "tags": [
+      "forensics",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-043",
+    "category": "linux",
+    "title": "who / w",
+    "code": "w",
+    "description": "Show who is logged in and what they are doing.",
+    "example": "w",
+    "output": "USER TTY LOGIN@ IDLE JCPU PCPU WHAT",
+    "notes": "'who -b' shows the last system boot time.",
+    "tags": [
+      "forensics",
+      "system"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-044",
+    "category": "linux",
+    "title": "uname",
+    "code": "uname -a",
+    "description": "Print system information: kernel name, version, hostname and architecture.",
+    "example": "uname -a",
+    "output": "Linux soc-host 6.8.0-31-generic #31-Ubuntu SMP x86_64 GNU/Linux",
+    "notes": "Combine with 'cat /etc/os-release' to identify the exact distro/version.",
+    "tags": [
+      "system",
+      "recon"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-045",
+    "category": "linux",
+    "title": "free",
+    "code": "free -h",
+    "description": "Display amount of free and used memory, human-readable.",
+    "example": "free -h",
+    "output": "total used free shared buff/cache available\nMem: 15Gi 4.1Gi 2.0Gi",
+    "notes": "'available' is a better indicator of true free memory than 'free' alone.",
+    "tags": [
+      "system",
+      "monitoring"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-046",
+    "category": "linux",
+    "title": "useradd / usermod",
+    "code": "useradd -m user",
+    "description": "Create (useradd) or modify (usermod) a local user account.",
+    "example": "usermod -aG sudo analyst",
+    "output": "",
+    "notes": "-aG appends to a group; forgetting -a with -G overwrites all existing group memberships.",
+    "tags": [
+      "system",
+      "user-management"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-047",
+    "category": "linux",
+    "title": "passwd",
+    "code": "passwd user",
+    "description": "Change a user's password, or with -l/-u lock/unlock the account.",
+    "example": "passwd -l attacker_svc",
+    "output": "",
+    "notes": "Root can change any user's password; regular users can only change their own.",
+    "tags": [
+      "system",
+      "authentication"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-048",
+    "category": "linux",
+    "title": "sudo -l",
+    "code": "sudo -l",
+    "description": "List the commands the current user is permitted to run via sudo.",
+    "example": "sudo -l",
+    "output": "User analyst may run:\n  (ALL) NOPASSWD: /usr/bin/systemctl restart nginx",
+    "notes": "A key privilege-escalation enumeration step \u2014 misconfigured NOPASSWD entries are a common finding.",
+    "tags": [
+      "privesc",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-049",
+    "category": "linux",
+    "title": "visudo",
+    "code": "visudo",
+    "description": "Safely edit /etc/sudoers with syntax checking to prevent lockouts.",
+    "example": "visudo -c",
+    "output": "/etc/sudoers: parsed OK",
+    "notes": "Never edit /etc/sudoers directly with a text editor \u2014 a syntax error can lock out sudo entirely.",
+    "tags": [
+      "system",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-050",
+    "category": "linux",
+    "title": "ssh-keygen",
+    "code": "ssh-keygen -t ed25519",
+    "description": "Generate a new SSH key pair.",
+    "example": "ssh-keygen -t ed25519 -C 'analyst@soc'",
+    "output": "",
+    "notes": "ed25519 is preferred over rsa for new keys \u2014 smaller and faster with equivalent security.",
+    "tags": [
+      "networking",
+      "authentication"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-051",
+    "category": "linux",
+    "title": "openssl",
+    "code": "openssl x509 -in cert.pem -text",
+    "description": "Swiss-army-knife for TLS certs, hashing and encryption from the shell.",
+    "example": "openssl s_client -connect example.com:443 -servername example.com",
+    "output": "",
+    "notes": "'openssl x509 -noout -dates -in cert.pem' prints just validity dates \u2014 handy for cert-expiry checks.",
+    "tags": [
+      "networking",
+      "cryptography"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-052",
+    "category": "linux",
+    "title": "gpg",
+    "code": "gpg --encrypt file",
+    "description": "Encrypt, decrypt, sign and verify files/messages using GnuPG.",
+    "example": "gpg --verify report.sig report.txt",
+    "output": "gpg: Good signature from 'Analyst <a@soc.local>'",
+    "notes": "Use --armor for portable ASCII output instead of binary.",
+    "tags": [
+      "cryptography"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-053",
+    "category": "linux",
+    "title": "md5sum / sha256sum",
+    "code": "sha256sum file",
+    "description": "Compute a cryptographic checksum of a file, used for integrity verification.",
+    "example": "sha256sum suspicious.bin",
+    "output": "3a7bd3e2360a3d... suspicious.bin",
+    "notes": "Always prefer sha256 over md5 \u2014 md5 collisions are trivial to engineer.",
+    "tags": [
+      "forensics",
+      "cryptography"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-054",
+    "category": "linux",
+    "title": "file",
+    "code": "file unknown_binary",
+    "description": "Identify a file's type by inspecting its content/magic bytes, not its extension.",
+    "example": "file sample.exe",
+    "output": "sample.exe: PE32 executable (GUI) Intel 80386, for MS Windows",
+    "notes": "A quick, safe first step on unknown malware samples before deeper analysis.",
+    "tags": [
+      "forensics",
+      "malware-analysis"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-055",
+    "category": "linux",
+    "title": "strings",
+    "code": "strings binary",
+    "description": "Extract printable character sequences from a binary file.",
+    "example": "strings malware.bin | grep -i http",
+    "output": "hxxp://185.220.101.4/payload",
+    "notes": "-n sets minimum string length; often the fastest way to spot embedded URLs or IPs in malware.",
+    "tags": [
+      "forensics",
+      "malware-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-056",
+    "category": "linux",
+    "title": "stat",
+    "code": "stat file",
+    "description": "Show detailed file metadata: size, permissions, and MAC (modify/access/change) timestamps.",
+    "example": "stat /etc/passwd",
+    "output": "Access: 2026-07-26 08:00:11\nModify: 2026-01-04 12:03:22\nChange: 2026-01-04 12:03:22",
+    "notes": "Comparing Modify vs Change times can reveal timestamp tampering during an incident.",
+    "tags": [
+      "forensics"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-057",
+    "category": "linux",
+    "title": "diff",
+    "code": "diff file1 file2",
+    "description": "Compare two files line by line and show differences.",
+    "example": "diff -u baseline_config.txt current_config.txt",
+    "output": "",
+    "notes": "-u (unified) output is the format expected by 'patch'.",
+    "tags": [
+      "text",
+      "forensics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-058",
+    "category": "linux",
+    "title": "hexdump / xxd",
+    "code": "xxd file | head",
+    "description": "Display a file's raw bytes in hexadecimal (and ASCII) form.",
+    "example": "xxd sample.bin | head -n 5",
+    "output": "00000000: 4d5a 9000 0300 0000 0400 0000 ffff 0000  MZ..............",
+    "notes": "'4d5a' at offset 0 is the 'MZ' magic bytes of a Windows PE executable.",
+    "tags": [
+      "forensics",
+      "malware-analysis"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-059",
+    "category": "linux",
+    "title": "base64",
+    "code": "base64 file",
+    "description": "Encode/decode data in base64, often used to move binary data through text channels.",
+    "example": "echo 'suspicious' | base64",
+    "output": "c3VzcGljaW91cw==",
+    "notes": "-d decodes; attackers frequently base64-encode PowerShell/shell payloads to evade simple filters.",
+    "tags": [
+      "encoding"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-060",
+    "category": "linux",
+    "title": "chattr / lsattr",
+    "code": "chattr +i file",
+    "description": "Set/view extended ext2/3/4 filesystem attributes such as immutable (+i) or append-only (+a).",
+    "example": "chattr +i /etc/passwd",
+    "output": "",
+    "notes": "Even root cannot modify an immutable file without first clearing the flag \u2014 a useful tamper-resistance control.",
+    "tags": [
+      "forensics",
+      "filesystem"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-061",
+    "category": "linux",
+    "title": "dd",
+    "code": "dd if=in of=out",
+    "description": "Low-level block copy tool, used for raw disk imaging and wiping.",
+    "example": "dd if=/dev/sdb of=evidence.img bs=4M status=progress conv=noerror,sync",
+    "output": "",
+    "notes": "Double-check if=/of= before running \u2014 a swapped input/output can destroy data irrecoverably.",
+    "tags": [
+      "forensics",
+      "storage"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-062",
+    "category": "linux",
+    "title": "apt / dnf / yum",
+    "code": "apt install pkg",
+    "description": "Install, update or remove software packages (Debian/Ubuntu apt, RHEL dnf/yum).",
+    "example": "apt list --installed | grep openssl",
+    "output": "",
+    "notes": "'apt-get changelog pkg' can help confirm whether a CVE fix is present in the installed version.",
+    "tags": [
+      "system",
+      "package-management"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-063",
+    "category": "linux",
+    "title": "dpkg / rpm -qa",
+    "code": "dpkg -l",
+    "description": "List installed packages (Debian dpkg / RHEL rpm), useful for software inventory during IR.",
+    "example": "rpm -qa --last | head",
+    "output": "",
+    "notes": "Comparing package lists against a known-good baseline can reveal unauthorized installs.",
+    "tags": [
+      "system",
+      "package-management"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-064",
+    "category": "linux",
+    "title": "nc (netcat)",
+    "code": "nc -lvnp 4444",
+    "description": "Read/write data across network connections \u2014 used for banner grabbing, quick file transfer, or listeners.",
+    "example": "nc -zv 10.0.0.5 22-25",
+    "output": "Connection to 10.0.0.5 22 port [tcp/ssh] succeeded!",
+    "notes": "-z performs a fast port scan without sending data; extremely useful for connectivity troubleshooting.",
+    "tags": [
+      "networking",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-065",
+    "category": "linux",
+    "title": "auditctl / ausearch",
+    "code": "ausearch -k rootcmd",
+    "description": "Query the Linux audit framework logs for events matching a rule key, user, or syscall.",
+    "example": "ausearch -k rootcmd -ts today",
+    "output": "",
+    "notes": "'auditctl -w /etc/passwd -p wa -k passwd_changes' watches a file for write/attribute changes.",
+    "tags": [
+      "forensics",
+      "logging"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-066",
+    "category": "linux",
+    "title": "lastlog",
+    "code": "lastlog",
+    "description": "Show the most recent login for every user on the system.",
+    "example": "lastlog -u analyst",
+    "output": "Username Port From Latest\nanalyst pts/0 10.0.0.7 Sat Jul 25 22:01:09 2026",
+    "notes": "Accounts showing '**Never logged in**' but with a valid shell are worth investigating.",
+    "tags": [
+      "forensics",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "linux-067",
+    "category": "linux",
+    "title": "getfacl / setfacl",
+    "code": "getfacl file",
+    "description": "View or set POSIX Access Control Lists for finer-grained permissions than the standard rwx model.",
+    "example": "setfacl -m u:analyst:rx /cases/report.pdf",
+    "output": "",
+    "notes": "ACLs let you grant one extra user access without changing the file's primary group.",
+    "tags": [
+      "filesystem",
+      "permissions"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "linux-068",
+    "category": "linux",
+    "title": "lsblk",
+    "code": "lsblk",
+    "description": "List block devices (disks/partitions) in a tree view.",
+    "example": "lsblk -f",
+    "output": "NAME  FSTYPE  LABEL  MOUNTPOINT\nsda\n\u251c\u2500sda1 ext4          /",
+    "notes": "-f additionally shows filesystem type and UUID \u2014 handy before mounting an unknown disk image.",
+    "tags": [
+      "storage",
+      "forensics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-069",
+    "category": "linux",
+    "title": "ip a / ip route",
+    "code": "ip a",
+    "description": "Show or manipulate network interfaces, addresses and routing (modern replacement for ifconfig/route).",
+    "example": "ip route show",
+    "output": "default via 10.0.0.1 dev eth0",
+    "notes": "'ip -s link' adds interface traffic statistics (packets/bytes/errors).",
+    "tags": [
+      "networking"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "linux-070",
+    "category": "linux",
+    "title": "watch",
+    "code": "watch -n 2 cmd",
+    "description": "Run a command repeatedly, showing full-screen output \u2014 good for watching a value change live.",
+    "example": "watch -n 1 'ss -ant | grep ESTAB | wc -l'",
+    "output": "",
+    "notes": "Ctrl+C exits; -d highlights differences between successive updates.",
+    "tags": [
+      "monitoring"
+    ],
+    "difficulty": "Easy"
+  }
+]

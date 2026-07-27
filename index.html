@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Cheat Sheet — Offline SOC &amp; Pentest Reference</title>
+<meta name="description" content="Cyber Cheat Sheet is a free, offline reference for SOC analysts, ethical hackers, and blue teams: Linux, Windows, PowerShell, Nmap, Wireshark, Splunk, KQL, Sigma and YARA in one searchable dashboard.">
+<meta name="keywords" content="cyber cheat sheet, SOC, blue team, linux commands, windows commands, powershell, nmap, wireshark filters, splunk queries, KQL, sigma rules, yara rules, cybersecurity reference">
+<meta name="author" content="Cyber Cheat Sheet">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cyber Cheat Sheet — Offline SOC & Pentest Reference">
+<meta property="og:description" content="The ultimate offline reference for SOC analysts, ethical hackers, blue teams and cybersecurity students.">
+<meta property="og:image" content="assets/logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cyber Cheat Sheet — Offline SOC & Pentest Reference">
+<meta name="twitter:description" content="The ultimate offline reference for SOC analysts, ethical hackers, blue teams and cybersecurity students.">
+<meta name="twitter:image" content="assets/logo.png">
+
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1120">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<!-- Loading screen -->
+<div id="loading-screen" aria-hidden="true">
+  <div class="loader-ring"></div>
+  <div class="loader-text">Loading Cyber Cheat Sheet…</div>
+</div>
+
+<!-- Navbar -->
+<header class="navbar">
+  <div class="container">
+    <a href="#/" class="brand" aria-label="Cyber Cheat Sheet home">
+      <img src="assets/logo.png" alt="" width="30" height="30">
+      Cyber<span class="brand-accent">Cheat</span>Sheet
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
+      <a href="#/" data-route="/">Home</a>
+      <a href="#/category/linux" data-route="/category/linux">Linux</a>
+      <a href="#/category/windows" data-route="/category/windows">Windows</a>
+      <a href="#/category/powershell" data-route="/category/powershell">PowerShell</a>
+      <a href="#/category/nmap" data-route="/category/nmap">Nmap</a>
+      <a href="#/category/wireshark" data-route="/category/wireshark">Wireshark</a>
+      <a href="#/category/splunk" data-route="/category/splunk">Splunk</a>
+      <a href="#/category/kql" data-route="/category/kql">KQL</a>
+      <a href="#/category/sigma" data-route="/category/sigma">Sigma</a>
+      <a href="#/category/yara" data-route="/category/yara">YARA</a>
+      <a href="#/about" data-route="/about">About</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="favorites-nav-btn" title="Favorites" aria-label="View favorites">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3 6.2 21l1.6-6.9L2 9.2l7-.6L12 2l3 6.6 7 .6-5.8 4.9 1.6 6.9z"/></svg>
+      </button>
+      <a class="icon-btn" href="https://github.com/" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub repository">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.98 5.24.98 11.52c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55v-2.14c-3.16.69-3.83-1.36-3.83-1.36-.52-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.75 1.17 1.75 1.17 1.01 1.74 2.65 1.24 3.3.95.1-.73.4-1.24.72-1.53-2.53-.29-5.18-1.26-5.18-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.44.11-3.01 0 0 .96-.31 3.14 1.17a10.9 10.9 0 0 1 5.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.57.23 2.72.11 3.01.73.8 1.17 1.82 1.17 3.06 0 4.38-2.66 5.34-5.19 5.62.41.35.77 1.04.77 2.1v3.11c0 .3.21.66.79.55 4.51-1.5 7.77-5.76 7.77-10.78C23.02 5.24 18.27.5 12 .5Z"/></svg>
+      </a>
+      <button class="icon-btn nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-label="Mobile"></nav>
+
+<main id="main-content">
+  <div id="app"></div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-left">
+      <strong>Cyber Cheat Sheet</strong> — Built with HTML, CSS &amp; JavaScript. Ready for GitHub Pages. © <span id="foot-year"></span>
+    </div>
+    <div class="foot-links">
+      <a href="#/about">About</a>
+      <a href="#/favorites">Favorites</a>
+      <a href="#" id="print-link">Print</a>
+      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<button id="scroll-top" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<div id="toast-container" aria-live="polite"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

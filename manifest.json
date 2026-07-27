@@ -1,0 +1,15 @@
+{
+  "name": "Cyber Cheat Sheet",
+  "short_name": "CyberCheatSheet",
+  "description": "Offline reference for SOC analysts, ethical hackers, blue teams and cybersecurity students.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#0B1120",
+  "orientation": "any",
+  "icons": [
+    { "src": "assets/favicon.png", "sizes": "64x64", "type": "image/png" },
+    { "src": "assets/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

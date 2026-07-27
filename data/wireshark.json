@@ -1,0 +1,736 @@
+[
+  {
+    "id": "wireshark-001",
+    "category": "wireshark",
+    "title": "Filter by IP address",
+    "code": "ip.addr == 10.0.0.5",
+    "description": "Show packets where either the source or destination IP matches.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "ip"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-002",
+    "category": "wireshark",
+    "title": "Filter by source IP",
+    "code": "ip.src == 10.0.0.5",
+    "description": "Show packets only where the source IP matches.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "ip"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-003",
+    "category": "wireshark",
+    "title": "Filter by destination IP",
+    "code": "ip.dst == 10.0.0.5",
+    "description": "Show packets only where the destination IP matches.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "ip"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-004",
+    "category": "wireshark",
+    "title": "Filter by subnet",
+    "code": "ip.addr == 10.0.0.0/24",
+    "description": "Show packets to/from any address within a CIDR subnet.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "ip"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-005",
+    "category": "wireshark",
+    "title": "Filter by TCP port",
+    "code": "tcp.port == 443",
+    "description": "Show TCP packets where either the source or destination port matches.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-006",
+    "category": "wireshark",
+    "title": "Filter by UDP port",
+    "code": "udp.port == 53",
+    "description": "Show UDP packets where either the source or destination port matches.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "udp",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-007",
+    "category": "wireshark",
+    "title": "HTTP traffic only",
+    "code": "http",
+    "description": "Show only packets carrying HTTP request/response data.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "http",
+      "web"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-008",
+    "category": "wireshark",
+    "title": "HTTP GET requests",
+    "code": "http.request.method == \"GET\"",
+    "description": "Show only HTTP GET requests.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "http",
+      "web"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-009",
+    "category": "wireshark",
+    "title": "HTTP POST requests",
+    "code": "http.request.method == \"POST\"",
+    "description": "Show only HTTP POST requests \u2014 often worth inspecting for exfiltrated data or credentials.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "http",
+      "web"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-010",
+    "category": "wireshark",
+    "title": "HTTP response status errors",
+    "code": "http.response.code >= 400",
+    "description": "Show HTTP responses with a 4xx or 5xx status code.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "http",
+      "web"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-011",
+    "category": "wireshark",
+    "title": "DNS traffic only",
+    "code": "dns",
+    "description": "Show only DNS query/response packets.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "dns"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-012",
+    "category": "wireshark",
+    "title": "DNS queries for a domain",
+    "code": "dns.qry.name contains \"evil\"",
+    "description": "Show DNS queries whose name contains a substring \u2014 useful for hunting suspicious domains.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "dns",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-013",
+    "category": "wireshark",
+    "title": "FTP traffic only",
+    "code": "ftp",
+    "description": "Show only FTP control-channel packets (commands/responses).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "ftp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-014",
+    "category": "wireshark",
+    "title": "FTP credentials in cleartext",
+    "code": "ftp.request.command == \"PASS\"",
+    "description": "Show FTP PASS commands, which carry the password in cleartext \u2014 a classic finding to flag.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "ftp",
+      "credentials"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-015",
+    "category": "wireshark",
+    "title": "SMTP traffic only",
+    "code": "smtp",
+    "description": "Show only SMTP (email submission) packets.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "smtp",
+      "email"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-016",
+    "category": "wireshark",
+    "title": "TLS/SSL handshake",
+    "code": "tls.handshake",
+    "description": "Show packets that are part of a TLS handshake (ClientHello, ServerHello, certificates, etc).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tls",
+      "encryption"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-017",
+    "category": "wireshark",
+    "title": "TLS ClientHello (SNI)",
+    "code": "tls.handshake.type == 1",
+    "description": "Show TLS ClientHello packets, which contain the SNI hostname the client is requesting \u2014 visible even over encrypted traffic.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tls",
+      "encryption"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-018",
+    "category": "wireshark",
+    "title": "TCP SYN packets",
+    "code": "tcp.flags.syn == 1 and tcp.flags.ack == 0",
+    "description": "Show only TCP connection-initiation (SYN) packets, useful for spotting scan activity.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp",
+      "scanning"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-019",
+    "category": "wireshark",
+    "title": "TCP RST packets",
+    "code": "tcp.flags.reset == 1",
+    "description": "Show TCP reset packets, often indicating a refused/aborted connection.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-020",
+    "category": "wireshark",
+    "title": "TCP retransmissions",
+    "code": "tcp.analysis.retransmission",
+    "description": "Show packets Wireshark has flagged as TCP retransmissions \u2014 a sign of packet loss or a struggling link.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp",
+      "performance"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-021",
+    "category": "wireshark",
+    "title": "TCP duplicate ACKs",
+    "code": "tcp.analysis.duplicate_ack",
+    "description": "Show duplicate ACKs, often a precursor to fast-retransmit and a sign of packet loss.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp",
+      "performance"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-022",
+    "category": "wireshark",
+    "title": "ICMP traffic only",
+    "code": "icmp",
+    "description": "Show only ICMP packets (ping, traceroute, unreachable/error messages).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "icmp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-023",
+    "category": "wireshark",
+    "title": "ICMP echo requests/replies",
+    "code": "icmp.type == 8 or icmp.type == 0",
+    "description": "Show ping request (type 8) and reply (type 0) packets specifically.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "icmp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-024",
+    "category": "wireshark",
+    "title": "ARP traffic only",
+    "code": "arp",
+    "description": "Show only ARP request/reply packets.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "arp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-025",
+    "category": "wireshark",
+    "title": "Possible ARP spoofing",
+    "code": "arp.duplicate-address-detected",
+    "description": "Show packets Wireshark flags as a duplicate IP/MAC pairing \u2014 a strong ARP-spoofing indicator.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "arp",
+      "threat-hunting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "wireshark-026",
+    "category": "wireshark",
+    "title": "Filter by MAC address",
+    "code": "eth.addr == aa:bb:cc:dd:ee:ff",
+    "description": "Show packets where either the source or destination MAC matches.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "ethernet",
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-027",
+    "category": "wireshark",
+    "title": "Exclude a protocol (negation)",
+    "code": "!(arp or icmp)",
+    "description": "Hide noisy background protocols like ARP and ICMP to focus on the traffic that matters.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-028",
+    "category": "wireshark",
+    "title": "Filter by packet size",
+    "code": "frame.len > 1000",
+    "description": "Show packets larger than a given byte length \u2014 useful for spotting large exfil transfers.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-029",
+    "category": "wireshark",
+    "title": "Filter by frame number",
+    "code": "frame.number == 4021",
+    "description": "Jump directly to a specific packet number, handy when cross-referencing with another tool's output.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-030",
+    "category": "wireshark",
+    "title": "HTTP User-Agent contains",
+    "code": "http.user_agent contains \"curl\"",
+    "description": "Show HTTP requests whose User-Agent header contains a given substring, e.g. flagging scripted clients.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "http",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-031",
+    "category": "wireshark",
+    "title": "Contains a string anywhere in the packet",
+    "code": "frame contains \"password\"",
+    "description": "Search the full raw packet bytes for a text string, across any protocol/layer.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-032",
+    "category": "wireshark",
+    "title": "TCP stream follow filter",
+    "code": "tcp.stream == 5",
+    "description": "Isolate every packet belonging to one TCP conversation/stream index.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-033",
+    "category": "wireshark",
+    "title": "Kerberos traffic",
+    "code": "kerberos",
+    "description": "Show Kerberos authentication packets \u2014 central to Active Directory auth troubleshooting/hunting.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "active-directory",
+      "authentication"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-034",
+    "category": "wireshark",
+    "title": "SMB/CIFS traffic",
+    "code": "smb2",
+    "description": "Show SMB2/3 (Windows file-sharing) protocol packets.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "smb",
+      "windows"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-035",
+    "category": "wireshark",
+    "title": "SMB named pipe access",
+    "code": "smb2.filename contains \"IPC\"",
+    "description": "Show SMB2 traffic referencing IPC$ named pipes, often used in lateral-movement tooling.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "smb",
+      "threat-hunting"
+    ],
+    "difficulty": "Hard"
+  },
+  {
+    "id": "wireshark-036",
+    "category": "wireshark",
+    "title": "DHCP traffic",
+    "code": "dhcp",
+    "description": "Show DHCP lease request/offer/ack traffic (bootp in older Wireshark versions).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "dhcp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-037",
+    "category": "wireshark",
+    "title": "NTP traffic",
+    "code": "ntp",
+    "description": "Show Network Time Protocol packets.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "ntp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-038",
+    "category": "wireshark",
+    "title": "SNMP traffic",
+    "code": "snmp",
+    "description": "Show SNMP management/monitoring packets.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "snmp"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-039",
+    "category": "wireshark",
+    "title": "SNMP community string in cleartext",
+    "code": "snmp.community",
+    "description": "Show SNMP packets, exposing the community string field \u2014 SNMPv1/2c send this in cleartext.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "snmp",
+      "credentials"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-040",
+    "category": "wireshark",
+    "title": "VLAN-tagged traffic",
+    "code": "vlan",
+    "description": "Show 802.1Q VLAN-tagged frames.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "ethernet"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-041",
+    "category": "wireshark",
+    "title": "Filter by specific VLAN ID",
+    "code": "vlan.id == 100",
+    "description": "Show frames tagged with a specific VLAN ID.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "ethernet"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-042",
+    "category": "wireshark",
+    "title": "Malformed / expert-flagged packets",
+    "code": "tcp.analysis.flags",
+    "description": "Show any packet Wireshark's expert system has flagged as anomalous (retransmission, out-of-order, zero window, etc).",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp",
+      "troubleshooting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-043",
+    "category": "wireshark",
+    "title": "TCP zero window",
+    "code": "tcp.analysis.zero_window",
+    "description": "Show packets announcing a zero receive window \u2014 the receiver's buffer is full and cannot accept more data.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp",
+      "performance"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-044",
+    "category": "wireshark",
+    "title": "HTTP requests to a specific host",
+    "code": "http.host == \"example.com\"",
+    "description": "Show HTTP requests whose Host header matches exactly.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "http",
+      "web"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-045",
+    "category": "wireshark",
+    "title": "Filter by TLS SNI value",
+    "code": "tls.handshake.extensions_server_name == \"example.com\"",
+    "description": "Show TLS ClientHello packets requesting a specific hostname via SNI.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tls",
+      "threat-hunting"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-046",
+    "category": "wireshark",
+    "title": "Filter by TCP flags (PSH+ACK)",
+    "code": "tcp.flags == 0x018",
+    "description": "Show packets with exactly the PSH and ACK flags set, common for data-carrying segments.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tcp"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-047",
+    "category": "wireshark",
+    "title": "Filter out a specific IP",
+    "code": "!(ip.addr == 10.0.0.1)",
+    "description": "Hide all traffic to/from a given IP, e.g. excluding a noisy monitoring host.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "basics"
+    ],
+    "difficulty": "Easy"
+  },
+  {
+    "id": "wireshark-048",
+    "category": "wireshark",
+    "title": "Bootp/DHCP option 12 hostname",
+    "code": "bootp.option.hostname",
+    "description": "Show the client hostname advertised in a DHCP request \u2014 quick way to inventory devices on a capture.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "dhcp",
+      "recon"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-049",
+    "category": "wireshark",
+    "title": "QUIC traffic",
+    "code": "quic",
+    "description": "Show QUIC (HTTP/3 transport) packets, increasingly common with modern browsers.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "quic",
+      "web"
+    ],
+    "difficulty": "Medium"
+  },
+  {
+    "id": "wireshark-050",
+    "category": "wireshark",
+    "title": "Filter TLS by version",
+    "code": "tls.record.version == 0x0301",
+    "description": "Show TLS records using a specific protocol version (0x0301 = TLS 1.0) \u2014 useful for spotting legacy/weak TLS still in use.",
+    "example": "",
+    "output": "",
+    "notes": "",
+    "tags": [
+      "tls",
+      "vulnerability"
+    ],
+    "difficulty": "Hard"
+  }
+]
